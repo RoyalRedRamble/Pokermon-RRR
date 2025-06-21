@@ -1,0 +1,20 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Seviper Functionality
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.blind.name == 'The Serpent' and"
+position = "before"
+payload = '''
+    if next(SMODS.find_card('j_rrr_seviper')) and
+        G.STATE == G.STATES.DRAW_TO_HAND and
+        (G.GAME.current_round.hands_played > 0 or
+        G.GAME.current_round.discards_used > 0) then
+            hand_space = math.min(#G.deck.cards, 3)
+    end
+    '''
+match_indent = true
