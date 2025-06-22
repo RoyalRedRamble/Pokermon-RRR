@@ -3,6 +3,21 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
+
+# Zangoose Functionality
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = "function Blind:press_play()"
+position = "after"
+payload = '''
+    if next(SMODS.find_card('j_rrr_zangoose')) then
+        rrr_hook_copy()
+    end
+'''
+match_indent = true
+
+
 # Seviper Functionality
 [[patches]]
 [patches.pattern]

@@ -1,0 +1,19 @@
+rrr_hook_copy = function()
+    G.E_MANAGER:add_event(Event({ func = function()
+        local any_selected = nil
+        local _cards = {}
+        for k, v in ipairs(G.hand.cards) do
+            _cards[#_cards+1] = v
+        end
+        for i = 1, 2 do
+            if G.hand.cards[i] then 
+                local selected_card, card_key = pseudorandom_element(_cards, pseudoseed('hook'))
+                G.hand:add_to_highlighted(selected_card, true)
+                table.remove(_cards, card_key)
+                any_selected = true
+                play_sound('card1', 1)
+            end
+        end
+        if any_selected then G.FUNCS.discard_cards_from_highlighted(nil, true) end
+    return true end }))
+end 

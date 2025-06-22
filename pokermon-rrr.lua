@@ -13,6 +13,13 @@ if (SMODS.Mods["Pokermon"] or {}).can_load then
     pokermon_config = SMODS.Mods["Pokermon"].config
 end
 
+local helper, load_error = SMODS.load_file("functions/utilfunctions.lua")
+if load_error then
+  sendDebugMessage ("The error is: "..load_error)
+else
+  helper()
+end
+
 -- print("PARTY TIEM")
 
 --Load pokemon file

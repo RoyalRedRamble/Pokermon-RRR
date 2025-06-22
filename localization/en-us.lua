@@ -1,6 +1,15 @@
 return {
     descriptions = {
         Joker = {
+            j_rrr_zangoose = {
+                name = "Zangoose",
+                text = {
+                    "{X:mult,C:white}X#1#{} if {C:attention}#2#{} or less",
+                    "cards held in hand",
+                    "{br:3}ERROR - CONTACT STEAK",
+                    "Applies {C:attention}The Hook{}",
+                } 
+            },
             j_rrr_seviper = {
                 name = "Seviper",
                 text = {
@@ -15,7 +24,7 @@ return {
     }, 
     misc = {
         challenge_names = {
-            c_rrr_seviper = "Seviper",
+            c_rrr_the_rivals = "The Rivals",
         },
 
     }
