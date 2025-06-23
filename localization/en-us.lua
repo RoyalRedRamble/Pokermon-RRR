@@ -4,7 +4,7 @@ return {
             j_rrr_zangoose = {
                 name = "Zangoose",
                 text = {
-                    "{X:mult,C:white}X#1#{} if {C:attention}#2#{} or less",
+                    "{X:mult,C:white}X#1#{} if {C:attention}#2#{} or fewer",
                     "cards held in hand",
                     "{br:3}ERROR - CONTACT STEAK",
                     "Applies {C:attention}The Hook{}",
