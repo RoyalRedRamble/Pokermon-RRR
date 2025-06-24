@@ -33,3 +33,16 @@ payload = '''
     end
     '''
 match_indent = true
+
+# Combee 'bee' suits Functionality
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "return self.base.suit == suit"
+position = "before"
+payload = '''
+if rrr_bee_suit_check(self, suit) then
+    return true
+end
+'''
+match_indent = true

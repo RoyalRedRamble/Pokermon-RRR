@@ -17,3 +17,13 @@ rrr_hook_copy = function()
         if any_selected then G.FUNCS.discard_cards_from_highlighted(nil, true) end
     return true end }))
 end 
+
+function rrr_bee_suit_check(card, suit)
+    if not (next(SMODS.find_card('j_rrr_combee')) or next(SMODS.find_card('j_rrr_vespiquen'))) then
+        return false
+    end
+    if ((card.base.suit == 'Spades' or card.base.suit == 'Diamonds') and (suit == 'Spades' or suit == 'Diamonds')) then
+        return true
+    end
+    return false
+end

@@ -1,3 +1,7 @@
+-- load family entries
+table.insert(family, {"combee", "vespiquen"})
+
+
 --Load all Atlas
 SMODS.Atlas({
     key = "modicon",
@@ -75,7 +79,8 @@ if (SMODS.Mods["Pokermon"] or {}).can_load and SMODS.Mods["Pokermon"] then
             end
             item.discovered = not pokermon_config.pokemon_discovery 
             -- DEBUG
-            -- if item.name == "seviper" then item.discovered = true end
+            if item.name == "combee" then item.discovered = true end
+            if item.name == "vespiquen" then item.discovered = true end
             SMODS.Joker(item)
           end
         end
