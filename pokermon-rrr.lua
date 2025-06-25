@@ -1,7 +1,3 @@
--- load family entries
-table.insert(family, {"combee", "vespiquen"})
-
-
 --Load all Atlas
 SMODS.Atlas({
     key = "modicon",
@@ -15,6 +11,8 @@ SMODS.Atlas({
 mod_dir = ''..SMODS.current_mod.path
 if (SMODS.Mods["Pokermon"] or {}).can_load then
     pokermon_config = SMODS.Mods["Pokermon"].config
+    -- load family entries
+    pokermon.add_family({"combee", "vespiquen"})
 end
 
 local helper, load_error = SMODS.load_file("functions/utilfunctions.lua")

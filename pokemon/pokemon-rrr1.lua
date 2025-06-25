@@ -72,12 +72,12 @@ local combee={
     name = "combee",
     poke_custom_prefix = 'rrr',
     pos = {x = 0, y=2},
-    config = {extra = {chip = 10, mult = 2, chipSuit = 'Spades', multSuit = 'Diamonds', can_evo = false}},
+    config = {extra = {chips = 10, mult = 2, chipSuit = 'Spades', multSuit = 'Diamonds', can_evo = false}},
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
         info_queue[#info_queue+1] = {set = 'Other', key= 'bee_suits'}
         return {vars = {
-            center.ability.extra.chip, center.ability.extra.chipSuit,
+            center.ability.extra.chips, center.ability.extra.chipSuit,
             center.ability.extra.mult, center.ability.extra.multSuit,
             center.ability.extra.can_evo
         }}
@@ -94,7 +94,7 @@ local combee={
         if context.individual and context.cardarea == G.play then
             if context.other_card:is_suit(card.ability.extra.chipSuit) then
                 if not context.end_of_round and not context.before and not context.after and not context.other_card.debuff then
-                    chips = card.ability.extra.chip
+                    chips = card.ability.extra.chips
                     mult = card.ability.extra.mult
                 end
             end
@@ -158,7 +158,7 @@ local vespiquen={
         if context.individual and context.cardarea == G.play then
             if context.other_card:is_suit(card.ability.extra.chipSuit) then
                 if not context.end_of_round and not context.before and not context.after and not context.other_card.debuff then
-                    chips = card.ability.extra.chip
+                    chips = card.ability.extra.chips
                     mult = card.ability.extra.mult
                     if context.other_card:get_id() == 12 then
                         xMult = card.ability.extra.Xmult
