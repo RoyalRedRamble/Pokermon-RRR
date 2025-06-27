@@ -56,18 +56,18 @@ return {
             j_rrr_maushold_three = {
                 name = "Maushold",
                 text = {
-                    "Uses {C:attention}Population Bomb{} if hand",
+                    "Uses {C:attention}Population Bomb EX{} if hand",
                     "contains a {C:attention}#1#{}",
                     "or a {C:attention}#2#{}",
-                    "{C:inactive,s:0.8}(Yes these stack)"
+                    "{C:inactive,s:0.8}(Yes these stack)",
                 } 
             },
             j_rrr_maushold_four = {
                 name = "Maushold",
                 text = {
-                    "Uses {C:attention}Population Bomb{} if hand",
+                    "Uses {C:attention}Population Bomb EX{} if hand",
                     "contains a {C:attention}#1#{}", 
-                    "or a {C:attention}#2#{}"
+                    "or a {C:attention}#2#{}",
                 } 
             },
         },
@@ -90,7 +90,7 @@ return {
                 }
             },
             population_bomb_ex = {
-                name = "Population Bomb",
+                name = "Population Bomb EX",
                 text = {
                     "{C:green}#1#%{} chance to give",
                     "{X:mult,C:white}X#2#{} Mult when card is scored",

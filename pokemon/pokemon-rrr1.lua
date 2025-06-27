@@ -244,10 +244,10 @@ local maushold_three={
     name = "maushold_three",
     poke_custom_prefix = 'rrr',
     pos = {x = 6, y=1},
-    config = {extra = {Xmult = 1.5, origXMult = 1.5, incMult = 0.5, odds=90, combo = true, hand = "Three of a Kind", handTwo = "Full House"}},
+    config = {extra = {Xmult = 1.5, totalXMult = 1.5, incMult = 0.5, odds=90, combo = true, hand = "Three of a Kind", handTwo = "Full House"}},
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
-        info_queue[#info_queue+1] = {set = 'Other', key = 'population_bomb_ex', vars={center.ability.extra.odds, center.ability.extra.origXMult, center.ability.extra.incMult}}
+        info_queue[#info_queue+1] = {set = 'Other', key = 'population_bomb_ex', vars={center.ability.extra.odds, center.ability.extra.Xmult, center.ability.extra.incMult}}
         return {vars = {center.ability.extra.hand, center.ability.extra.handTwo}}
     end,
     rarity = "poke_safari",
@@ -260,13 +260,13 @@ local maushold_three={
         if context.individual and context.cardarea == G.play then
             if card.ability.extra.combo and (next(context.poker_hands[card.ability.extra.hand]) or next(context.poker_hands[card.ability.extra.handTwo])) then
                 if pseudorandom('maushold_three') < card.ability.extra.odds/100 then
-                    local Xmult = card.ability.extra.Xmult
+                    local Xmult = card.ability.extra.totalXMult
                     local message = "Population Bomb!"
-                    card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.incMult
+                    card.ability.extra.totalXMult = card.ability.extra.totalXMult + card.ability.extra.incMult
                     -- If it's a full house it'll count for both
                     if (next(context.poker_hands[card.ability.extra.hand]) and next(context.poker_hands[card.ability.extra.handTwo])) then
                         -- Double double!
-                        card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.incMult
+                        card.ability.extra.totalXMult = card.ability.extra.totalXMult + card.ability.extra.incMult
                         message = "POPULATION BOMB!"
                     end
                     return {
@@ -284,7 +284,7 @@ local maushold_three={
         end
 
         if context.after then
-            card.ability.extra.Xmult = card.ability.extra.origXMult
+            card.ability.extra.totalXMult = card.ability.extra.Xmult 
             card.ability.extra.combo = true
         end
 
@@ -298,10 +298,10 @@ local maushold_four={
     name = "maushold_four",
     poke_custom_prefix = 'rrr',
     pos = {x = 7, y=1},
-    config = {extra = {Xmult = 1.5, origXMult = 1.5, incMult = 0.5, odds=90, combo = true, hand = "Four of a Kind", handTwo = "Full House"}},
+    config = {extra = {Xmult = 1.5, totalXMult = 1.5, incMult = 0.5, odds=90, combo = true, hand = "Four of a Kind", handTwo = "Full House"}},
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
-        info_queue[#info_queue+1] = {set = 'Other', key = 'population_bomb_ex', vars={center.ability.extra.odds, center.ability.extra.origXMult, center.ability.extra.incMult}}
+        info_queue[#info_queue+1] = {set = 'Other', key = 'population_bomb_ex', vars={center.ability.extra.odds, center.ability.extra.Xmult, center.ability.extra.incMult}}
         return {vars = {center.ability.extra.hand, center.ability.extra.handTwo}}
     end,
     rarity = "poke_safari",
@@ -314,8 +314,8 @@ local maushold_four={
         if context.individual and context.cardarea == G.play then
             if card.ability.extra.combo and (next(context.poker_hands[card.ability.extra.hand]) or next(context.poker_hands[card.ability.extra.handTwo])) then
                 if pseudorandom('maushold_four') < card.ability.extra.odds/100 then
-                    local Xmult = card.ability.extra.Xmult
-                    card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.incMult
+                    local Xmult = card.ability.extra.totalXMult
+                    card.ability.extra.totalXMult = card.ability.extra.totalXMult + card.ability.extra.incMult
                     return {
                         message = "Population Bomb!",
                         xmult = Xmult,
@@ -331,7 +331,7 @@ local maushold_four={
         end
 
         if context.after then
-            card.ability.extra.Xmult = card.ability.extra.origXMult
+            card.ability.extra.totalXMult = card.ability.extra.Xmult
             card.ability.extra.combo = true
         end
 
