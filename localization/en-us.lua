@@ -85,7 +85,7 @@ return {
                     "{C:green}#1#%{} chance to give",
                     "{C:mult}+#2#{} Mult when card is scored",
                     "Mult is {C:attention}doubled{} per trigger",
-                    "but stops triggering on failure.",
+                    "but stops triggering on first failure.",
                     "{C:attention}Resets{} after each hand."
                 }
             },
@@ -95,7 +95,7 @@ return {
                     "{C:green}#1#%{} chance to give",
                     "{X:mult,C:white}X#2#{} Mult when card is scored",
                     "Increased by {X:mult,C:white}#3#{} per trigger",
-                    "but stops triggering on failure.",
+                    "but stops triggering on first failure.",
                     "{C:attention}Resets{} after each hand."
                 }
             },
