@@ -13,6 +13,7 @@ if (SMODS.Mods["Pokermon"] or {}).can_load then
     pokermon_config = SMODS.Mods["Pokermon"].config
     -- load family entries
     pokermon.add_family({"combee", "vespiquen"})
+    pokermon.add_family({"tandemaus", "maushold_three", "maushold_four"})
 end
 
 local helper, load_error = SMODS.load_file("functions/utilfunctions.lua")

@@ -45,6 +45,31 @@ return {
                     "{X:mult,C:white}X#5#{} when scored"
                 } 
             },
+            j_rrr_tandemaus = {
+                name = "Tandemaus",
+                text = {
+                    "Uses {C:attention}Population Bomb{} if hand",
+                    "contains a {C:attention}#1#{}",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)"
+                } 
+            },
+            j_rrr_maushold_three = {
+                name = "Maushold",
+                text = {
+                    "Uses {C:attention}Population Bomb{} if hand",
+                    "contains a {C:attention}#1#{}",
+                    "or a {C:attention}#2#{}",
+                    "{C:inactive,s:0.8}(Yes these stack)"
+                } 
+            },
+            j_rrr_maushold_four = {
+                name = "Maushold",
+                text = {
+                    "Uses {C:attention}Population Bomb{} if hand",
+                    "contains a {C:attention}#1#{}", 
+                    "or a {C:attention}#2#{}"
+                } 
+            },
         },
         Other = {
             bee_suits = {
@@ -52,6 +77,26 @@ return {
                 text = {
                     "{C:spades}Spades{} and {C:diamonds}Diamonds{}",
                     "count as the same suit",
+                }
+            },
+            population_bomb = {
+                name = "Population Bomb",
+                text = {
+                    "{C:green}#1#%{} chance to give",
+                    "{C:mult}+#2#{} Mult when card is scored",
+                    "Mult is {C:attention}doubled{} per trigger",
+                    "but stops triggering on failure.",
+                    "{C:attention}Resets{} after each hand."
+                }
+            },
+            population_bomb_ex = {
+                name = "Population Bomb",
+                text = {
+                    "{C:green}#1#%{} chance to give",
+                    "{X:mult,C:white}X#2#{} Mult when card is scored",
+                    "Increased by {X:mult,C:white}#3#{} per trigger",
+                    "but stops triggering on failure.",
+                    "{C:attention}Resets{} after each hand."
                 }
             },
         },
