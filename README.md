@@ -40,3 +40,22 @@ Maushold both use **Population Bomb EX**: "90% chance to give x1.5 Mult when car
 | Tandemaus | Uses **Population Bomb** if hand contains a Pair |
 | Maushold (four) | Uses **Population Bomb EX** if hand contains a **Four of a Kind** or a **Full House** |
 | Maushold (three) | Uses **Population Bomb EX** if hand contains a **Three of a Kind** or a **Full House** <br/>(Yes these stack) |
+
+### The Sumos
+
+These guys have big hands, and so can you if they find their way onto your team! They're all about giving you a few extra hands and expanding your hand size.
+
+| Joker | Effect |
+| ------ | ------ |
+| Makuhita | +1 hand <br/>+1 hand size |
+| Hariyama | +2 hands <br/>+2 hand size<br/>+1 hand size for every hand used this round |
+
+### The Sloths
+
+You might need to coax these guys a little to help you out, but they pack a punch when they do!
+
+| Joker | Effect |
+| ------ | ------ |
+| Slakoth | +20 Mult every second hand |
+| Vigoroth | +30 Mult|
+| Slaking | x4 Mult every second hand |

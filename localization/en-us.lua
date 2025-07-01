@@ -73,7 +73,7 @@ return {
             j_rrr_makuhita = {
                 name = "Makuhita",
                 text = {
-                    "{C:blue}+#1#{} hands",
+                    "{C:blue}+#1#{} hand",
                     "{C:attention}+#2#{} hand size",
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)",
                 } 
@@ -105,8 +105,7 @@ return {
             j_rrr_slaking = {
                 name = "Slaking",
                 text = {
-                    "Alternates between {C:attention}Slaking Off{} and",
-                    "{X:mult,C:white}X#1#{} Mult every hand",
+                    "{X:mult,C:white}X#1#{} Mult every {C:attention}second{} hand",
                     "{C:inactive}#2#{}",
                 } 
             },
