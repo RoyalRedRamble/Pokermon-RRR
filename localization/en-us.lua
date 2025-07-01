@@ -70,6 +70,46 @@ return {
                     "or a {C:attention}#2#{}",
                 } 
             },
+            j_rrr_makuhita = {
+                name = "Makuhita",
+                text = {
+                    "{C:blue}+#1#{} hands",
+                    "{C:attention}+#2#{} hand size",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)",
+                } 
+            },
+            j_rrr_hariyama = {
+                name = "Hariyama",
+                text = {
+                    "{C:blue}+#1#{} hands",
+                    "{C:attention}+#2#{} hand size",
+                    "Gain {C:attention}+1{} hand size for",
+                    "every hand used this round",
+                } 
+            },
+            j_rrr_slakoth = {
+                name = "Slakoth",
+                text = {
+                    "{C:mult}+#1#{} Mult every {C:attention}second{} hand",
+                    "{C:inactive}#2#{}",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)",
+                } 
+            },
+            j_rrr_vigoroth = {
+                name = "Vigoroth",
+                text = {
+                    "{C:mult}+#1#{} Mult",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
+                } 
+            },
+            j_rrr_slaking = {
+                name = "Slaking",
+                text = {
+                    "Alternates between {C:attention}Slaking Off{} and",
+                    "{X:mult,C:white}X#1#{} Mult every hand",
+                    "{C:inactive}#2#{}",
+                } 
+            },
         },
         Other = {
             bee_suits = {
@@ -105,6 +145,14 @@ return {
         challenge_names = {
             c_rrr_the_rivals = "The Rivals",
             c_rrr_combee = "Combee",
+        },
+        dictionary = {
+            rrr_slacking = "Slacking Off!",
+            rrr_ready = "Ready!",
+            rrr_yawn = "Yawn",
+            rrr_miss = "Miss",
+            rrr_population_bomb = "Population Bomb!",
+            rrr_population_bomb_big = "POPULATION BOMB!",
         },
 
     }

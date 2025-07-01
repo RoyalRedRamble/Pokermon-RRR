@@ -1,3 +1,221 @@
+local slakoth = {
+    name = "slakoth",
+    poke_custom_prefix = 'rrr',
+    pos = {x = 5, y=3},
+    config = {extra = {mult = 20, yawn = true, rounds = 8, }},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        local message = localize("rrr_ready")
+        if center.ability.extra.yawn then
+            message = localize("rrr_slacking")
+        end
+        return {vars = {center.ability.extra.mult, message, center.ability.extra.rounds}}
+    end,
+    rarity = 1,
+    cost = 3,
+    stage = "Basic",
+    ptype = "Colorless",
+    atlas = "poke_Pokedex3",
+    debuff = true,
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.cardarea == G.jokers and context.joker_main and context.scoring_hand and context.full_hand then
+            if card.ability.extra.yawn then
+                card.ability.extra.yawn = false
+                return {
+                    message = localize("rrr_yawn")
+                }
+            else
+                card.ability.extra.yawn = true
+                return {
+                    mult = card.ability.extra.mult,
+                }
+            end
+        end
+
+        return level_evo(self, card, context, 'j_rrr_vigoroth')
+    end,
+    prefix_config = {
+        atlas = false,
+    },
+}
+
+local vigoroth = {
+    name = "vigoroth",
+    poke_custom_prefix = 'rrr',
+    pos = {x = 6, y=3},
+    config = {extra = {mult = 30, rounds = 4}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {center.ability.extra.mult, center.ability.extra.rounds}}
+    end,
+    rarity = "poke_safari",
+    cost = 6,
+    stage = "One",
+    ptype = "Colorless",
+    atlas = "poke_Pokedex3",
+    debuff = true,
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.cardarea == G.jokers and context.joker_main and context.scoring_hand and context.full_hand then
+            return {
+                mult = card.ability.extra.mult,
+            }
+        end
+
+        return level_evo(self, card, context, 'j_rrr_slaking')
+    end,
+    prefix_config = {
+        atlas = false,
+    },
+}
+
+local slaking = {
+    name = "slaking",
+    poke_custom_prefix = 'rrr',
+    pos = {x = 7, y=3},
+    config = {extra = {Xmult = 4, yawn = true }},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        local message = localize("rrr_ready")
+        if center.ability.extra.yawn then
+            message = localize("rrr_slacking")
+        end
+        return {vars = {center.ability.extra.Xmult, message}}
+    end,
+    rarity = "poke_safari",
+    cost = 10,
+    stage = "Two",
+    ptype = "Colorless",
+    atlas = "poke_Pokedex3",
+    debuff = true,
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.cardarea == G.jokers and context.joker_main and context.scoring_hand and context.full_hand then
+            if card.ability.extra.yawn then
+                card.ability.extra.yawn = false
+                return {
+                    message = localize("rrr_yawn")
+                }
+            else
+                card.ability.extra.yawn = true
+                return {
+                    Xmult = card.ability.extra.Xmult,
+                }
+            end
+        end
+    end,
+    prefix_config = {
+        atlas = false,
+    },
+}
+
+local makuhita={
+    name = "makuhita",
+    poke_custom_prefix = 'rrr',
+    pos = {x = 4, y=4},
+    config = {extra = {hands = 1, h_size = 1, rounds = 5}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {center.ability.extra.hands, center.ability.extra.h_size, center.ability.extra.rounds}}
+    end,
+    rarity = 2,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Fighting",
+    atlas = "poke_Pokedex3",
+    debuff = true,
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        return level_evo(self, card, context, 'j_rrr_hariyama')
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        -- Hands
+        G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.hands
+        if not from_debuff then
+            ease_hands_played(card.ability.extra.hands)
+        end
+
+        -- Hand size
+        G.hand:change_size(card.ability.extra.h_size)
+
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        -- Hands
+        G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
+        local to_decrease = math.min(G.GAME.current_round.hands_left - 1, card.ability.extra.hands)
+        if to_decrease > 0 then
+          ease_hands_played(-to_decrease)
+        end
+        -- Hand size
+        G.hand:change_size(-card.ability.extra.h_size)
+
+    end,
+    prefix_config = {
+        atlas = false,
+    },
+}
+
+local hariyama={
+    name = "hariyama",
+    poke_custom_prefix = 'rrr',
+    pos = {x = 5, y=4},
+    config = {extra = {hands = 2, h_size = 2, orig_h_size = 2}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {center.ability.extra.hands, center.ability.extra.h_size}}
+    end,
+    rarity = 2,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Fighting",
+    atlas = "poke_Pokedex3",
+    debuff = true,
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        -- Every hand played increases your hand size by one
+        if context.after then
+            local changed_size = 1
+            card.ability.extra.h_size = card.ability.extra.h_size + changed_size
+            G.hand:change_size(changed_size)
+        end
+
+        -- reset to original size when finished
+        if context.end_of_round and context.cardarea == G.jokers then
+            G.hand:change_size(-(card.ability.extra.h_size-card.ability.extra.orig_h_size))
+            card.ability.extra.h_size = card.ability.extra.orig_h_size
+        end
+
+
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        -- Hands
+        G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.hands
+        if not from_debuff then
+            ease_hands_played(card.ability.extra.hands)
+        end
+
+        -- Hand size
+        G.hand:change_size(card.ability.extra.h_size)
+
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        -- Hands
+        G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
+        local to_decrease = math.min(G.GAME.current_round.hands_left - 1, card.ability.extra.hands)
+        if to_decrease > 0 then
+          ease_hands_played(-to_decrease)
+        end
+
+        -- Hand size
+        G.hand:change_size(-card.ability.extra.h_size)
+
+    end,
+    prefix_config = {
+        atlas = false,
+    },
+}
+
 local zangoose={
     name = "zangoose",
     poke_custom_prefix = 'rrr',
@@ -6,7 +224,7 @@ local zangoose={
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
         info_queue[#info_queue+1] = {set = 'Blind', key= 'bl_hook', config={}}
-            return {vars = {center.ability.extra.Xmult, center.ability.extra.handSize}}
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.handSize}}
     end,
     rarity = 3,
     cost = 6,
@@ -42,7 +260,7 @@ local seviper={
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
         info_queue[#info_queue+1] = {set = 'Blind', key= 'bl_serpent', config={}}
-            return {vars = {center.ability.extra.Xmult, center.ability.extra.handSize}}
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.handSize}}
     end,
     rarity = 3,
     cost = 6,
@@ -196,7 +414,7 @@ local tandemaus={
     config = {extra = {mult = 5, origMult = 5, odds=90, threeChance = 0.3, rounds = 5, combo = true, hand = "Pair"}},
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
-        info_queue[#info_queue+1] = {set = 'Other', key = 'population_bomb', vars={center.ability.extra.odds, center.ability.extra.origMult}}
+        info_queue[#info_queue+1] = {set = 'Other', key = 'population_bomb', vars={center.ability.extra.odds, center.ability.extra.mult}}
         return {vars = {center.ability.extra.hand, center.ability.extra.rounds}}
     end,
     rarity = 1,
@@ -212,14 +430,14 @@ local tandemaus={
                     local mult = card.ability.extra.mult
                     card.ability.extra.mult = card.ability.extra.mult * 2
                     return {
-                        message = "Population Bomb!",
+                        message = localize("rrr_population_bomb"),
                         mult = mult,
                         card = card
                     }
                 else
                     card.ability.extra.combo = false
                     return {
-                        message = "Miss",
+                        message = localize("rrr_miss"),
                     }
                 end
             end
@@ -261,13 +479,13 @@ local maushold_three={
             if card.ability.extra.combo and (next(context.poker_hands[card.ability.extra.hand]) or next(context.poker_hands[card.ability.extra.handTwo])) then
                 if pseudorandom('maushold_three') < card.ability.extra.odds/100 then
                     local Xmult = card.ability.extra.totalXMult
-                    local message = "Population Bomb!"
+                    local message = localize("rrr_population_bomb")
                     card.ability.extra.totalXMult = card.ability.extra.totalXMult + card.ability.extra.incMult
                     -- If it's a full house it'll count for both
                     if (next(context.poker_hands[card.ability.extra.hand]) and next(context.poker_hands[card.ability.extra.handTwo])) then
                         -- Double double!
                         card.ability.extra.totalXMult = card.ability.extra.totalXMult + card.ability.extra.incMult
-                        message = "POPULATION BOMB!"
+                        message = localize("rrr_population_bomb_big")
                     end
                     return {
                         message = message,
@@ -277,7 +495,7 @@ local maushold_three={
                 else
                     card.ability.extra.combo = false
                     return {
-                        message = "Miss",
+                        message = localize("rrr_miss"),
                     }
                 end
             end
@@ -317,14 +535,14 @@ local maushold_four={
                     local Xmult = card.ability.extra.totalXMult
                     card.ability.extra.totalXMult = card.ability.extra.totalXMult + card.ability.extra.incMult
                     return {
-                        message = "Population Bomb!",
+                        message = localize("rrr_population_bomb"),
                         xmult = Xmult,
                         card = card
                     }
                 else
                     card.ability.extra.combo = false
                     return {
-                        message = "Miss",
+                        message = localize("rrr_miss"),
                     }
                 end
             end
@@ -341,7 +559,8 @@ local maushold_four={
     },
 }
 
+
 return {
     name = "RoyalRedRamble's Jokers 1",
-    list = {zangoose, seviper, combee, vespiquen, tandemaus, maushold_three, maushold_four},
+    list = {slakoth, vigoroth, slaking,  makuhita, hariyama, zangoose, seviper, combee, vespiquen, tandemaus, maushold_three, maushold_four,},
   }

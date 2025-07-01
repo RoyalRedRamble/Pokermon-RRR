@@ -14,6 +14,8 @@ if (SMODS.Mods["Pokermon"] or {}).can_load then
     -- load family entries
     pokermon.add_family({"combee", "vespiquen"})
     pokermon.add_family({"tandemaus", "maushold_three", "maushold_four"})
+    pokermon.add_family({"makuhita", "hariyama"})
+    pokermon.add_family({"slakoth", "vigoroth", "slaking"})
 end
 
 local helper, load_error = SMODS.load_file("functions/utilfunctions.lua")
@@ -58,6 +60,9 @@ if (SMODS.Mods["Pokermon"] or {}).can_load and SMODS.Mods["Pokermon"] then
               elseif item.config then
                 item.config.extra = {ptype = item.ptype}
               end
+            end
+            if not item.set_badges then
+              item.set_badges = poke_set_type_badge
             end
             if item.item_req then
               if item.config and item.config.extra then
