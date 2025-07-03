@@ -41,51 +41,8 @@ if (SMODS.Mods["Pokermon"] or {}).can_load and SMODS.Mods["Pokermon"] then
       
       if curr_pokemon.list and #curr_pokemon.list > 0 then
         for i, item in ipairs(curr_pokemon.list) do
-          if (pokermon_config.jokers_only and not item.joblacklist) or not pokermon_config.jokers_only  then
-            item.discovered = true
-            if not item.key then
-              item.key = item.name
-            end
-            if not pokermon_config.no_evos and not item.custom_pool_func then
-              item.in_pool = function(self)
-                return pokemon_in_pool(self)
-              end
-            end
-            if not item.config then
-              item.config = {}
-            end
-            if item.ptype then
-              if item.config and item.config.extra then
-                item.config.extra.ptype = item.ptype
-              elseif item.config then
-                item.config.extra = {ptype = item.ptype}
-              end
-            end
-            if not item.set_badges then
-              item.set_badges = poke_set_type_badge
-            end
-            if item.item_req then
-              if item.config and item.config.extra then
-                item.config.extra.item_req = item.item_req
-              elseif item.config then
-                item.config.extra = {item_req = item.item_req}
-              end
-            end
-            if item.evo_list then
-              if item.config and item.config.extra then
-                item.config.extra.evo_list = item.evo_list
-              elseif item.config then
-                item.config.extra = {item_req = item.evo_list}
-              end
-            end
-            if pokermon_config.jokers_only and item.rarity == "poke_safari" then
-              item.rarity = 3
-            end
-            item.discovered = not pokermon_config.pokemon_discovery 
-            -- DEBUG
-            if item.name == "combee" then item.discovered = true end
-            if item.name == "vespiquen" then item.discovered = true end
-            SMODS.Joker(item)
+          if (pokermon_config.jokers_only and not item.joblacklist) or not pokermon_config.jokers_only then
+            pokermon.Pokemon(item, 'rrr', nil)
           end
         end
       end

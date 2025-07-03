@@ -109,6 +109,30 @@ return {
                     "{C:inactive}#2#{}",
                 } 
             },
+            j_rrr_sableye = {
+                name = "Sableye",
+                text = {
+                    "{C:attention}Destroys {C:diamonds}Diamonds{} cards",
+                    "left in hand after scoring.",
+                    "Gives {C:money}$#1#{} and gains {C:money}$#1#{} of",
+                    "sell value for every card",
+                    "consumed.",
+                } 
+            },
+            j_rrr_mega_sableye = {
+                name = "Mega Sableye",
+                text = {
+                    "{C:attention}Destroys {C:diamonds}Diamonds{} cards",
+                    "left in hand after scoring.",
+                    "Gives {C:money}$#1#{} and gains {C:money}$#1#{} of",
+                    "sell value for every card",
+                    "consumed.",
+                    "{br:2}ERROR - CONTACT STEAK",
+                    "Gives {X:mult,C:white}X#2#{} Mult for each",
+                    "{C:money}${} of sell value this Joker has",
+                    "{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive,s:0.8} Mult)",
+                } 
+            },
         },
         Other = {
             bee_suits = {

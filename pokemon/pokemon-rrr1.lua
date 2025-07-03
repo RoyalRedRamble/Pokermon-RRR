@@ -1,6 +1,5 @@
 local slakoth = {
     name = "slakoth",
-    poke_custom_prefix = 'rrr',
     pos = {x = 5, y=3},
     config = {extra = {mult = 20, yawn = true, rounds = 8, }},
     loc_vars = function(self, info_queue, center)
@@ -15,8 +14,7 @@ local slakoth = {
     cost = 3,
     stage = "Basic",
     ptype = "Colorless",
-    atlas = "poke_Pokedex3",
-    debuff = true,
+    atlas = "Pokedex3",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.cardarea == G.jokers and context.joker_main and context.scoring_hand and context.full_hand then
@@ -35,14 +33,10 @@ local slakoth = {
 
         return level_evo(self, card, context, 'j_rrr_vigoroth')
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local vigoroth = {
     name = "vigoroth",
-    poke_custom_prefix = 'rrr',
     pos = {x = 6, y=3},
     config = {extra = {mult = 30, rounds = 4}},
     loc_vars = function(self, info_queue, center)
@@ -53,8 +47,7 @@ local vigoroth = {
     cost = 6,
     stage = "One",
     ptype = "Colorless",
-    atlas = "poke_Pokedex3",
-    debuff = true,
+    atlas = "Pokedex3",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.cardarea == G.jokers and context.joker_main and context.scoring_hand and context.full_hand then
@@ -65,14 +58,10 @@ local vigoroth = {
 
         return level_evo(self, card, context, 'j_rrr_slaking')
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local slaking = {
     name = "slaking",
-    poke_custom_prefix = 'rrr',
     pos = {x = 7, y=3},
     config = {extra = {Xmult = 4, yawn = true }},
     loc_vars = function(self, info_queue, center)
@@ -87,8 +76,7 @@ local slaking = {
     cost = 10,
     stage = "Two",
     ptype = "Colorless",
-    atlas = "poke_Pokedex3",
-    debuff = true,
+    atlas = "Pokedex3",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.cardarea == G.jokers and context.joker_main and context.scoring_hand and context.full_hand then
@@ -105,14 +93,10 @@ local slaking = {
             end
         end
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local makuhita={
     name = "makuhita",
-    poke_custom_prefix = 'rrr',
     pos = {x = 4, y=4},
     config = {extra = {hands = 1, h_size = 1, rounds = 5}},
     loc_vars = function(self, info_queue, center)
@@ -123,8 +107,7 @@ local makuhita={
     cost = 6,
     stage = "Basic",
     ptype = "Fighting",
-    atlas = "poke_Pokedex3",
-    debuff = true,
+    atlas = "Pokedex3",
     blueprint_compat = true,
     calculate = function(self, card, context)
         return level_evo(self, card, context, 'j_rrr_hariyama')
@@ -151,14 +134,10 @@ local makuhita={
         G.hand:change_size(-card.ability.extra.h_size)
 
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local hariyama={
     name = "hariyama",
-    poke_custom_prefix = 'rrr',
     pos = {x = 5, y=4},
     config = {extra = {hands = 2, h_size = 2, orig_h_size = 2}},
     loc_vars = function(self, info_queue, center)
@@ -169,8 +148,7 @@ local hariyama={
     cost = 6,
     stage = "Basic",
     ptype = "Fighting",
-    atlas = "poke_Pokedex3",
-    debuff = true,
+    atlas = "Pokedex3",
     blueprint_compat = true,
     calculate = function(self, card, context)
         -- Every hand played increases your hand size by one
@@ -211,14 +189,91 @@ local hariyama={
         G.hand:change_size(-card.ability.extra.h_size)
 
     end,
-    prefix_config = {
-        atlas = false,
-    },
+}
+
+local sableye = {
+    name = "sableye",
+    pos = {x = 0, y=5},
+    config = {extra = {money_mod = 1}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {center.ability.extra.money_mod}}
+    end,
+    rarity = 2,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Dark",
+    atlas = "Pokedex3",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.after then
+            local eaten = 0
+            for i=1, #G.hand.cards do
+                if G.hand.cards[i]:is_suit('Diamonds') then
+                    eaten = eaten + 1
+                    poke_remove_card(G.hand.cards[i], card)
+                    card.ability.extra_value = card.ability.extra_value + card.ability.extra.money_mod
+                    card:set_cost()
+                end
+            end
+            if eaten  > 0 then
+                ease_poke_dollars(card, "sableye", eaten * card.ability.extra.money_mod)
+                return {
+                    message = "Delicious"
+                }
+            end
+        end
+    end,
+}
+
+local mega_sableye = {
+    name = "mega_sableye",
+    pos = {x = 5, y=3},
+    soul_pos = {x = 6, y=3},
+    config = {extra = {money_mod = 3, Xmult = 0.05}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {center.ability.extra.money_mod, center.ability.extra.Xmult, 1 + center.ability.extra.Xmult * center.sell_cost }}
+    end,
+    rarity = "poke_mega",
+    cost = 10,
+    stage = "Mega",
+    ptype = "Dark",
+    atlas = "Megas",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.after then
+            local eaten = 0
+            for i=1, #G.hand.cards do
+                if G.hand.cards[i]:is_suit('Diamonds') then
+                    eaten = eaten + 1
+                    poke_remove_card(G.hand.cards[i], card)
+                    card.ability.extra_value = card.ability.extra_value + card.ability.extra.money_mod
+                    card:set_cost()
+                end
+            end
+            if eaten  > 0 then
+                ease_poke_dollars(card, "sableye", eaten * card.ability.extra.money_mod)
+                return {
+                    message = "MORE!"
+                }
+            end
+        end
+
+        if context.cardarea == G.jokers and context.scoring_hand then
+            if context.joker_main then
+              return {
+                message = localize{type = 'variable', key = 'a_xmult', vars = {1 + card.ability.extra.Xmult * card.sell_cost}}, 
+                colour = G.C.MULT,
+                Xmult_mod = 1 + card.ability.extra.Xmult * card.sell_cost
+              }
+            end
+        end
+    end,
 }
 
 local zangoose={
     name = "zangoose",
-    poke_custom_prefix = 'rrr',
     pos = {x = 3, y=8},
     config = {extra = {Xmult = 2, handSize = 3}},
     loc_vars = function(self, info_queue, center)
@@ -230,8 +285,7 @@ local zangoose={
     cost = 6,
     stage = "Basic",
     ptype = "Colorless",
-    atlas = "poke_Pokedex3",
-    debuff = true,
+    atlas = "Pokedex3",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.cardarea == G.jokers and context.scoring_hand and context.full_hand then
@@ -246,15 +300,11 @@ local zangoose={
             end
         end
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 
 local seviper={
     name = "seviper",
-    poke_custom_prefix = 'rrr',
     pos = {x = 4, y=8},
     config = {extra = {Xmult = 1.5, handSize = 5}},
     loc_vars = function(self, info_queue, center)
@@ -266,7 +316,7 @@ local seviper={
     cost = 6,
     stage = "Basic",
     ptype = "Dark",
-    atlas = "poke_Pokedex3",
+    atlas = "Pokedex3",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.cardarea == G.jokers and context.scoring_hand and context.full_hand then
@@ -281,14 +331,10 @@ local seviper={
             end
         end
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local combee={
     name = "combee",
-    poke_custom_prefix = 'rrr',
     pos = {x = 0, y=2},
     config = {extra = {chips = 10, mult = 2, chipSuit = 'Spades', multSuit = 'Diamonds', can_evo = false}},
     loc_vars = function(self, info_queue, center)
@@ -304,7 +350,7 @@ local combee={
     cost = 3,
     stage = "Basic",
     ptype = "Grass",
-    atlas = "poke_Pokedex4",
+    atlas = "Pokedex4",
     blueprint_compat = true,
     calculate = function(self, card, context)
         local chips = 0
@@ -343,15 +389,11 @@ local combee={
             }
         end
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 
 local vespiquen={
     name = "vespiquen",
-    poke_custom_prefix = 'rrr',
     pos = {x = 1, y=2},
     config = {extra = {chips = 20, mult = 5, chipSuit = 'Spades', multSuit = 'Diamonds', Xmult = 1.2}},
     loc_vars = function(self, info_queue, center)
@@ -367,7 +409,7 @@ local vespiquen={
     cost = 6,
     stage = "One",
     ptype = "Grass",
-    atlas = "poke_Pokedex4",
+    atlas = "Pokedex4",
     blueprint_compat = true,
     calculate = function(self, card, context)
         local chips = 0
@@ -395,9 +437,6 @@ local vespiquen={
         end
 
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local get_tandemaus_evo = function(chance)
@@ -409,7 +448,6 @@ end
 
 local tandemaus={
     name = "tandemaus",
-    poke_custom_prefix = 'rrr',
     pos = {x = 5, y=1},
     config = {extra = {mult = 5, origMult = 5, odds=90, threeChance = 0.3, rounds = 5, combo = true, hand = "Pair"}},
     loc_vars = function(self, info_queue, center)
@@ -421,7 +459,7 @@ local tandemaus={
     cost = 4,
     stage = "Basic",
     ptype = "Colorless",
-    atlas = "poke_Pokedex9",
+    atlas = "Pokedex9",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play and next(context.poker_hands[card.ability.extra.hand]) then
@@ -453,14 +491,10 @@ local tandemaus={
         return level_evo(self, card, context, get_tandemaus_evo(card.ability.extra.threeChance))
 
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local maushold_three={
     name = "maushold_three",
-    poke_custom_prefix = 'rrr',
     pos = {x = 6, y=1},
     config = {extra = {Xmult = 1.5, totalXMult = 1.5, incMult = 0.5, odds=90, combo = true, hand = "Three of a Kind", handTwo = "Full House"}},
     loc_vars = function(self, info_queue, center)
@@ -472,7 +506,7 @@ local maushold_three={
     cost = 6,
     stage = "One",
     ptype = "Colorless",
-    atlas = "poke_Pokedex9",
+    atlas = "Pokedex9",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
@@ -507,14 +541,10 @@ local maushold_three={
         end
 
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 local maushold_four={
     name = "maushold_four",
-    poke_custom_prefix = 'rrr',
     pos = {x = 7, y=1},
     config = {extra = {Xmult = 1.5, totalXMult = 1.5, incMult = 0.5, odds=90, combo = true, hand = "Four of a Kind", handTwo = "Full House"}},
     loc_vars = function(self, info_queue, center)
@@ -526,7 +556,7 @@ local maushold_four={
     cost = 6,
     stage = "One",
     ptype = "Colorless",
-    atlas = "poke_Pokedex9",
+    atlas = "Pokedex9",
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
@@ -554,13 +584,10 @@ local maushold_four={
         end
 
     end,
-    prefix_config = {
-        atlas = false,
-    },
 }
 
 
 return {
     name = "RoyalRedRamble's Jokers 1",
-    list = {slakoth, vigoroth, slaking,  makuhita, hariyama, zangoose, seviper, combee, vespiquen, tandemaus, maushold_three, maushold_four,},
+    list = {slakoth, vigoroth, slaking,  makuhita, hariyama, sableye, mega_sableye, zangoose, seviper, combee, vespiquen, tandemaus, maushold_three, maushold_four,},
   }
