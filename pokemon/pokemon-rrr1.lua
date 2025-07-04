@@ -587,7 +587,63 @@ local maushold_four={
 }
 
 
+local honedge = {
+    name = "honedge",
+    pos = {x = 1, y=2},
+    config = {
+        consumeable = {},
+        extra = {probability = 1/7},
+    },
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Earth",
+    atlas = "Pokedex6",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.individual and not context.end_of_round and context.cardarea == G.hand then
+            print(context.other_card.facing)
+            if context.other_card.facing == "back" then
+                return {
+                    mult = 7,
+                    card = card,
+                }
+            end
+        end
+    end,
+    can_use = function(self, card)
+        return #G.hand.cards > 0
+    end,
+    use = function(self, card, area, copier)
+        if G.hand.cards and #G.hand.cards > 0 then
+            for i = 1, #G.hand.cards do
+                G.hand.cards[i]:flip()
+            end
+        end
+        card:flip()
+    end,
+    keep_on_use = function(self, card)
+        return true
+    end,
+}
+
+local list = {
+    slakoth, vigoroth, slaking, 
+    makuhita, hariyama, 
+    sableye, mega_sableye, 
+    zangoose, 
+    seviper, 
+    combee, vespiquen, 
+    tandemaus, maushold_three, maushold_four, 
+    honedge
+}
+
+
 return {
     name = "RoyalRedRamble's Jokers 1",
-    list = {slakoth, vigoroth, slaking,  makuhita, hariyama, sableye, mega_sableye, zangoose, seviper, combee, vespiquen, tandemaus, maushold_three, maushold_four,},
+    list = list,
   }

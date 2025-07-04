@@ -27,3 +27,13 @@ function rrr_bee_suit_check(card, suit)
     end
     return false
 end
+
+
+function rrr_should_flip(card)
+    local i, joker = next(SMODS.find_card('j_rrr_honedge'))
+    if (i) then
+        if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
+            card:flip()
+        end
+    end
+end

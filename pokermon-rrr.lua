@@ -9,6 +9,8 @@ SMODS.Atlas({
 
 -- Get mod path and load other files
 mod_dir = ''..SMODS.current_mod.path
+rrr_config = SMODS.current_mod.config
+
 if (SMODS.Mods["Pokermon"] or {}).can_load then
     pokermon_config = SMODS.Mods["Pokermon"].config
     -- load family entries
@@ -26,6 +28,14 @@ else
 end
 
 -- print("PARTY TIEM")
+
+--Load UI file
+local UI, load_error = SMODS.load_file("ui.lua")
+if load_error then
+  sendDebugMessage ("The error is: "..load_error)
+else
+  UI()
+end
 
 --Load pokemon file
 local pfiles = NFS.getDirectoryItems(mod_dir.."pokemon")

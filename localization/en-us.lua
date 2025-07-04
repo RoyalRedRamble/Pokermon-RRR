@@ -176,6 +176,17 @@ return {
             rrr_miss = "Miss",
             rrr_population_bomb = "Population Bomb!",
             rrr_population_bomb_big = "POPULATION BOMB!",
+
+
+            --Mod config menu
+            ----Pokemon Families
+            rrr_settings_fam_slakoth = "Slakoth",
+            rrr_settings_fam_makuhita = "Makuhita",
+            rrr_settings_fam_sableye = "Sableye",
+            rrr_settings_fam_zangoose = "Zangoose",
+            rrr_settings_fam_seviper = "Seviper",
+            rrr_settings_fam_combee = "Combee",
+            rrr_settings_fam_tandemaus = "Tandemaus",
         },
 
     }
