@@ -1,22 +1,22 @@
-local combee = {
-    object_type = "Challenge",
-    key = "combee",
-    jokers = {
-        {id = "j_rrr_combee"},
-    },
-    consumeables = {
-        {id = "c_poke_pokeball"},
-    },
-    rules = {
-        modifiers = {
-            {id = 'dollars', value = '60000'}
-        }
-    },
-    vouchers = {
-        {id = "v_retcon"},
-        {id = "v_directors_cut"},
-    }
-}
+-- local combee = {
+--     object_type = "Challenge",
+--     key = "combee",
+--     jokers = {
+--         {id = "j_rrr_combee"},
+--     },
+--     consumeables = {
+--         {id = "c_poke_pokeball"},
+--     },
+--     rules = {
+--         modifiers = {
+--             {id = 'dollars', value = '60000'}
+--         }
+--     },
+--     vouchers = {
+--         {id = "v_retcon"},
+--         {id = "v_directors_cut"},
+--     }
+-- }
 
 local the_rivals = {
     object_type = "Challenge",
@@ -28,5 +28,5 @@ local the_rivals = {
 }
 
 return {name = "Challenges",
-    list = {the_rivals, combee}
+    list = {the_rivals}
 }
