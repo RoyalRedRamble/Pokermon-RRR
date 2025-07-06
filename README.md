@@ -59,3 +59,13 @@ You might need to coax these guys a little to help you out, but they pack a punc
 | Slakoth | +20 Mult every second hand |
 | Vigoroth | +30 Mult|
 | Slaking | x4 Mult every second hand |
+
+### The Diamond Gremlin
+
+Watch out, Sableye is hungry for every Diamond you aren't using! On the other hand, having a belly full of diamonds certainly makes him a lot more valuable. At least he pays you for what he eats!
+And if you can mega evolve him, he turns all that valuable diamond munching into a hefty power up!
+
+| Joker | Effect |
+| ------ | ------ |
+| Sableye | Destroys Diamond cards left in hand after scoring <br/>Gives $1 and gains $1 of sell value for every card consumed |
+| Mega Sableye | Destroys Diamond cards left in hand after scoring <br/> Gives \$3 and gains \$3 of sell value for every card consumed <br/> Gives x0.05 Mult for each \$ of sell value this Joker has |
