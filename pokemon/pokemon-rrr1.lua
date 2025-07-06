@@ -197,6 +197,7 @@ local sableye = {
     config = {extra = {money_mod = 1}},
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
+        info_queue[#info_queue + 1] = {set = 'Other', key = 'mega_poke'}
         return {vars = {center.ability.extra.money_mod}}
     end,
     rarity = 2,
@@ -224,6 +225,7 @@ local sableye = {
             end
         end
     end,
+    megas = { "mega_sableye" },
 }
 
 local mega_sableye = {
@@ -586,8 +588,126 @@ local maushold_four={
     end,
 }
 
+-- I'll come back to this
+local honedge = {
+    name = "honedge",
+    pos = {x = 1, y=2},
+    config = {
+        extra = {probability = 1/7},
+    },
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Metal",
+    atlas = "Pokedex6",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.individual and not context.end_of_round and context.cardarea == G.hand then
+            print(context.other_card.facing)
+            if context.other_card.facing == "back" then
+                return {
+                    mult = 7,
+                    card = card,
+                }
+            end
+        end
+    end,
+}
+
+local doublade = {
+    name = "doublade",
+    pos = {x = 2, y=2},
+    config = {
+        extra = {probability = 2/7},
+    },
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Metal",
+    atlas = "Pokedex6",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.individual and not context.end_of_round and context.cardarea == G.hand then
+            print(context.other_card.facing)
+            if context.other_card.facing == "back" then
+                return {
+                    mult = 10,
+                    card = card,
+                }
+            end
+        end
+    end,
+}
+
+local aegislash = {
+    name = "aegislash",
+    pos = {x = 3, y=2},
+    config = {
+        -- consumeable = {},
+        extra = {probability = 3/7},
+    },
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Metal",
+    atlas = "Pokedex6",
+    blueprint_compat = true,
+    set_sprites = function(self, card, front)
+        card.children.back.atlas = G.ASSET_ATLAS[self.atlas]
+        card.children.back:set_sprite_pos({x = 11, y = 7})
+    end,
+    calculate = function(self, card, context)
+        if context.individual and not context.end_of_round and context.cardarea == G.hand then
+            print(context.other_card.facing)
+            if context.other_card.facing == "back" then
+                return {
+                    mult = 7,
+                    card = card,
+                }
+            end
+        end
+    end,
+    can_use = function(self, card)
+        return #G.hand.cards > 0
+    end,
+    use = function(self, card, area, copier)
+        if G.hand.cards and #G.hand.cards > 0 then
+            for i = 1, #G.hand.cards do
+                G.hand.cards[i]:flip()
+            end
+        end
+        card:flip()
+    end,
+    keep_on_use = function(self, card)
+        return true
+    end,
+}
+
+local list = {
+    slakoth, vigoroth, slaking, 
+    makuhita, hariyama, 
+    sableye, mega_sableye, 
+    zangoose, 
+    seviper, 
+    combee, vespiquen, 
+    tandemaus, maushold_three, maushold_four, 
+    -- honedge, doublade, aegislash,
+}
+
 
 return {
     name = "RoyalRedRamble's Jokers 1",
-    list = {slakoth, vigoroth, slaking,  makuhita, hariyama, sableye, mega_sableye, zangoose, seviper, combee, vespiquen, tandemaus, maushold_three, maushold_four,},
+    list = list,
   }

@@ -46,3 +46,18 @@ if rrr_bee_suit_check(self, suit) then
 end
 '''
 match_indent = true
+
+
+# FLIPS ME OFF patch
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "if self == G.hand and stay_flipped then"
+position = "before"
+payload = '''
+if self == G.hand and self.config.type ~= 'discard' and self.config.type ~= 'deck' then
+    -- Flip dat shit back
+    rrr_should_flip(card)
+end
+'''
+match_indent = true

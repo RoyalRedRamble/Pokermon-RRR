@@ -9,6 +9,8 @@ SMODS.Atlas({
 
 -- Get mod path and load other files
 mod_dir = ''..SMODS.current_mod.path
+rrr_config = SMODS.current_mod.config
+
 if (SMODS.Mods["Pokermon"] or {}).can_load then
     pokermon_config = SMODS.Mods["Pokermon"].config
     -- load family entries
@@ -16,6 +18,8 @@ if (SMODS.Mods["Pokermon"] or {}).can_load then
     pokermon.add_family({"tandemaus", "maushold_three", "maushold_four"})
     pokermon.add_family({"makuhita", "hariyama"})
     pokermon.add_family({"slakoth", "vigoroth", "slaking"})
+    pokermon.add_family({"sableye", "mega_sableye"})
+    -- pokermon.add_family({"honedge", "doublade", "aegislash"})
 end
 
 local helper, load_error = SMODS.load_file("functions/utilfunctions.lua")
@@ -26,6 +30,14 @@ else
 end
 
 -- print("PARTY TIEM")
+
+--Load UI file
+local UI, load_error = SMODS.load_file("ui.lua")
+if load_error then
+  sendDebugMessage ("The error is: "..load_error)
+else
+  UI()
+end
 
 --Load pokemon file
 local pfiles = NFS.getDirectoryItems(mod_dir.."pokemon")
@@ -42,6 +54,16 @@ if (SMODS.Mods["Pokermon"] or {}).can_load and SMODS.Mods["Pokermon"] then
       if curr_pokemon.list and #curr_pokemon.list > 0 then
         for i, item in ipairs(curr_pokemon.list) do
           if (pokermon_config.jokers_only and not item.joblacklist) or not pokermon_config.jokers_only then
+            -- if the item has a ptype we can reasonably guess it's a pokemon
+            if (item.ptype) then
+              if (rrr_config[get_base_evo_name(item)..'_fam']) then
+                item.custom_pool_func = true
+                item.in_pool = disableable_pool
+              else
+                sendDebugMessage("Couldn't find a relevant config flag for "..item.name)
+                sendDebugMessage("Might have forgotten to add one?")
+              end
+            end
             pokermon.Pokemon(item, 'rrr', nil)
           end
         end

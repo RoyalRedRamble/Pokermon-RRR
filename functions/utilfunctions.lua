@@ -27,3 +27,56 @@ function rrr_bee_suit_check(card, suit)
     end
     return false
 end
+
+
+function rrr_should_flip(card)
+    local flipped = false
+    local i, joker = next(SMODS.find_card('j_rrr_honedge'))
+    if (i) then
+        if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
+            card:flip()
+            flipped = true
+        end
+    end
+
+    i, joker = next(SMODS.find_card('j_rrr_doublade'))
+    if (i and not flipped) then
+        if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
+            card:flip()
+            flipped = true
+        end
+    end
+
+    i, joker = next(SMODS.find_card('j_rrr_aegislash'))
+    if (i and not flipped) then
+        if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
+            card:flip()
+            flipped = true
+        end
+    end
+end
+
+function get_base_evo_name(card)
+    -- Get the name of the base form if you can
+    local fam = poke_get_family_list(card.name)
+    -- Default is your own name, you may have no family T.T
+    local base_evo_name = card.name
+    if #fam > 0 then
+        -- Found a base evo, use it's name
+        base_evo_name = fam[1]
+    end
+    return base_evo_name
+end
+
+disableable_pool = function(self)
+    local base_evo_name = get_base_evo_name(self)
+    
+    -- Convert the name to a config key, check if it's in the config at all
+    if (rrr_config[base_evo_name..'_fam']) then
+        -- If enabled, it's in the back poke pool
+        return pokemon_in_pool(self)
+    end
+    
+    -- Removed from pool otherwise
+    return false
+end
