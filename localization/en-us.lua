@@ -112,7 +112,7 @@ return {
             j_rrr_sableye = {
                 name = "Sableye",
                 text = {
-                    "{C:attention}Destroys {C:diamonds}Diamonds{} cards",
+                    "{C:attention}Destroys {C:diamonds}Diamond{} cards",
                     "left in hand after scoring.",
                     "Gives {C:money}$#1#{} and gains {C:money}$#1#{} of",
                     "sell value for every card",
@@ -122,7 +122,7 @@ return {
             j_rrr_mega_sableye = {
                 name = "Mega Sableye",
                 text = {
-                    "{C:attention}Destroys {C:diamonds}Diamonds{} cards",
+                    "{C:attention}Destroys {C:diamonds}Diamond{} cards",
                     "left in hand after scoring.",
                     "Gives {C:money}$#1#{} and gains {C:money}$#1#{} of",
                     "sell value for every card",
@@ -180,6 +180,7 @@ return {
 
             --Mod config menu
             ----Pokemon Families
+            rrr_settings_fam_toggle_header = "Enabled Pokemon families",
             rrr_settings_fam_slakoth = "Slakoth",
             rrr_settings_fam_makuhita = "Makuhita",
             rrr_settings_fam_sableye = "Sableye",

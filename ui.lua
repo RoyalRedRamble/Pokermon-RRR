@@ -1,4 +1,4 @@
-local no_restart_toggles = {
+local family_toggles = {
     {ref_value = "slakoth_fam", label = "rrr_settings_fam_slakoth"}, 
     {ref_value = "makuhita_fam", label = "rrr_settings_fam_makuhita"}, 
     {ref_value = "sableye_fam", label = "rrr_settings_fam_sableye"}, 
@@ -26,8 +26,8 @@ local create_menu_toggles = function (parent, toggles)
   end
   
 config = function()
-    local no_restart_settings = {n = G.UIT.R, config = {align = "tm", padding = 0.05, scale = 0.75, colour = G.C.CLEAR,}, nodes = {}}
-    create_menu_toggles(no_restart_settings, no_restart_toggles)
+    local family_settings = {n = G.UIT.R, config = {align = "tm", padding = 0.05, scale = 0.75, colour = G.C.CLEAR,}, nodes = {}}
+    create_menu_toggles(family_settings, family_toggles)
     
     local config_nodes =   
     {
@@ -41,7 +41,7 @@ config = function()
           {
             n = G.UIT.T,
             config = {
-              text = "Disable Families",
+              text = localize("rrr_settings_fam_toggle_header"),
               shadow = true,
               scale = 0.75 * 0.8,
               colour = HEX("ED533A")
@@ -49,23 +49,22 @@ config = function()
           }
         },
       },
-      no_restart_settings,
+      family_settings,
     }
     return config_nodes
   end
 
--- I want to give the user the choice to disable certain families, especially as I suck at balancing
--- Might take a little effort though, rather do the fun bits!
--- TODO: Note to self, the joker API has `in_pool` which allows me to stop a card spawning.
---  If that can read from config then it's not complicated at all
--- SMODS.current_mod.config_tab = function()
---     return {
---       n = G.UIT.ROOT,
---       config = {
---         align = "cm",
---         padding = 0.05,
---         colour = G.C.CLEAR,
---       },
---       nodes = config()
---     }
--- end
+-- TODO toggles are bare minimum, I'd like to have a paginated ui element with the cards of the base form and the toggle
+-- Using the family UI code we should be able to right click the card element to see the whole family line.
+-- UI is hard, future problems! Toggles work for now.
+SMODS.current_mod.config_tab = function()
+    return {
+      n = G.UIT.ROOT,
+      config = {
+        align = "cm",
+        padding = 0.05,
+        colour = G.C.CLEAR,
+      },
+      nodes = config()
+    }
+end
