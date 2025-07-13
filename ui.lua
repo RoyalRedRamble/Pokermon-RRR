@@ -6,6 +6,7 @@ local family_toggles = {
     {ref_value = "seviper_fam", label = "rrr_settings_fam_seviper"}, 
     {ref_value = "combee_fam", label = "rrr_settings_fam_combee"}, 
     {ref_value = "tandemaus_fam", label = "rrr_settings_fam_tandemaus"}, 
+    {ref_value = "honedge_fam", label = "rrr_settings_fam_honedge"}, 
 
 }
 
@@ -68,3 +69,27 @@ SMODS.current_mod.config_tab = function()
       nodes = config()
     }
 end
+
+
+-- By default any child of a card that isn't already a specially reserved 'named' child will be drawn on top of the card
+-- Which is lame if you want to add buttons, in a similar fashion to 'use' and 'sell' which are usually a little underneath
+-- SO you have to add a custom DrawStep to SMODS so that it knows WHEN to draw the child.
+SMODS.DrawStep {
+    key = 'forme_buttons',
+    order = -30, -- Buttons are -30 priority. Duplicate priorities are fine so just match it
+    func = function(self)
+        --Draw any tags/buttons
+        -- TODO: would be nice to allow this to support N forme changes but pre-mature optimization is the root of all evil
+        if self.children.forme_button then
+            if self.highlighted then
+                self.children.forme_button.states.visible = true
+                self.children.forme_button:draw()
+            else
+                self.children.forme_button.states.visible = false
+            end
+        end
+    end,
+} 
+-- NEED to add your draw step key to the list of keys to ignore
+-- We're telling the drawing engine of SMODS "Hey, we have a rule set up to specifically draw this child, so don't worry about it"
+SMODS.draw_ignore_keys.forme_buttons = true

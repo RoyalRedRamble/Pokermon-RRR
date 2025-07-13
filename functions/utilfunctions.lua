@@ -30,28 +30,21 @@ end
 
 
 function rrr_should_flip(card)
-    local flipped = false
-    local i, joker = next(SMODS.find_card('j_rrr_honedge'))
-    if (i) then
-        if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
-            card:flip()
-            flipped = true
-        end
+    -- Ignore the flip while in shop, I could leave this to be cruel
+    if (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) then
+        return
     end
 
-    i, joker = next(SMODS.find_card('j_rrr_doublade'))
-    if (i and not flipped) then
-        if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
-            card:flip()
-            flipped = true
-        end
-    end
-
-    i, joker = next(SMODS.find_card('j_rrr_aegislash'))
-    if (i and not flipped) then
-        if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
-            card:flip()
-            flipped = true
+    local flip_jokers = {'j_rrr_honedge', 'j_rrr_doublade', 'j_rrr_aegislash'}
+    for _, f in ipairs(flip_jokers) do
+        -- Iterate through each card, in case we have double ups of different stages
+        for _, joker in ipairs(SMODS.find_card(f)) do
+            if joker.ability.extra.probability and pseudorandom(pseudoseed('rrr_should_flip')) < joker.ability.extra.probability then
+                card:flip()
+                -- If one probability hits, commit to the flip. Otherwise we have to contend with flips back and forth.
+                -- TODO: maybe that's just more fun to commit to though?
+                return
+            end
         end
     end
 end

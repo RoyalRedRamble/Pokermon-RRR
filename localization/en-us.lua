@@ -133,6 +133,42 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive,s:0.8} Mult)",
                 } 
             },
+            j_rrr_honedge = {
+                name = "Honedge",
+                text = {
+                    "{C:green}1 in 7{} chance to ",
+                    "draw a card face down",
+                    "{C:mult}+#1#{} Mult for each face",
+                    "down card held in hand",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#",
+                    "{C:inactive,s:0.8}scored face down cards)",
+                } 
+            },
+            j_rrr_doublade = {
+                name = "Duoblade",
+                text = {
+                    "{C:green}1 in 7{} chance to ",
+                    "draw a card face down",
+                    "{C:mult}+#1#{} Mult for each face",
+                    "down card held in hand",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#",
+                    "{C:inactive,s:0.8}scored face down cards)",
+                } 
+            },
+            j_rrr_aegislash = {
+                name = "Aegislash",
+                text = {
+                    "{C:green}1 in 7{} chance to ",
+                    "draw a card face down",
+                    "{X:mult,C:white}X#1#{} Mult for each face",
+                    "down card held in hand",
+                    "{br:3}ERROR - CONTACT STEAK",
+                    "{C:attention}Change forme{} flips all",
+                    "cards held in hand",
+                    "{C:inactive}Can only change forme",
+                    "{C:inactive}once per round"
+                } 
+            },
         },
         Other = {
             bee_suits = {
@@ -188,6 +224,7 @@ return {
             rrr_settings_fam_seviper = "Seviper",
             rrr_settings_fam_combee = "Combee",
             rrr_settings_fam_tandemaus = "Tandemaus",
+            rrr_settings_fam_honedge = "Honedge",
         },
 
     }

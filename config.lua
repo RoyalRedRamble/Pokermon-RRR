@@ -6,4 +6,5 @@ return {
     ["seviper_fam"] = true,
     ["combee_fam"] = true,
     ["tandemaus_fam"] = true,
+    ["honedge_fam"] = true,
 }

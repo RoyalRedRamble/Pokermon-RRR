@@ -588,16 +588,15 @@ local maushold_four={
     end,
 }
 
--- I'll come back to this
 local honedge = {
     name = "honedge",
     pos = {x = 1, y=2},
     config = {
-        extra = {probability = 1/7},
+        extra = {probability = 1/7, mult = 10, scored_cards = 10},
     },
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
-        return {vars = {}}
+        return {vars = {center.ability.extra.mult, center.ability.extra.scored_cards}}
     end,
     rarity = 3,
     cost = 6,
@@ -607,13 +606,18 @@ local honedge = {
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.individual and not context.end_of_round and context.cardarea == G.hand then
-            print(context.other_card.facing)
             if context.other_card.facing == "back" then
+                if card.ability.extra.scored_cards then
+                    card.ability.extra.scored_cards = card.ability.extra.scored_cards - 1
+                end
                 return {
-                    mult = 7,
+                    mult = card.ability.extra.mult,
                     card = card,
                 }
             end
+        end
+        if card.ability.extra.scored_cards == 0 then
+            poke_evolve(card, 'j_rrr_doublade')
         end
     end,
 }
@@ -622,13 +626,13 @@ local doublade = {
     name = "doublade",
     pos = {x = 2, y=2},
     config = {
-        extra = {probability = 2/7},
+        extra = {probability = 1/7, mult = 16, scored_cards = 8},
     },
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
-        return {vars = {}}
+        return {vars = {center.ability.extra.mult, center.ability.extra.scored_cards}}
     end,
-    rarity = 3,
+    rarity = "poke_safari",
     cost = 6,
     stage = "Basic",
     ptype = "Metal",
@@ -636,64 +640,166 @@ local doublade = {
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.individual and not context.end_of_round and context.cardarea == G.hand then
-            print(context.other_card.facing)
             if context.other_card.facing == "back" then
+                if card.ability.extra.scored_cards then
+                    card.ability.extra.scored_cards = card.ability.extra.scored_cards - 1
+                end
                 return {
-                    mult = 10,
+                    mult = card.ability.extra.mult,
                     card = card,
                 }
             end
+        end
+        if card.ability.extra.scored_cards == 0 then
+            poke_evolve(card, 'j_rrr_aegislash')
         end
     end,
 }
 
+-- TODO: Just had a thought
+-- Defaults to sword forme, face down cards give steel bonus
+-- Swapping to shield forme alternates the face down cards BUT
+-- Either:
+-- -- - Lesser Xmult, so you have to debate whether to swap formes
+-- -- - Some other bonus that correlates to defence?
 local aegislash = {
     name = "aegislash",
     pos = {x = 3, y=2},
     config = {
-        -- consumeable = {},
-        extra = {probability = 3/7},
+        extra = {probability = 1/7, Xmult = 1.5, shield = false},
     },
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
-        return {vars = {}}
+        return {vars = {center.ability.extra.Xmult}}
     end,
-    rarity = 3,
+    rarity = "poke_safari",
     cost = 6,
     stage = "Basic",
     ptype = "Metal",
     atlas = "Pokedex6",
     blueprint_compat = true,
-    set_sprites = function(self, card, front)
-        card.children.back.atlas = G.ASSET_ATLAS[self.atlas]
-        card.children.back:set_sprite_pos({x = 11, y = 7})
-    end,
     calculate = function(self, card, context)
         if context.individual and not context.end_of_round and context.cardarea == G.hand then
-            print(context.other_card.facing)
             if context.other_card.facing == "back" then
                 return {
-                    mult = 7,
+                    Xmult = card.ability.extra.Xmult,
                     card = card,
                 }
             end
         end
-    end,
-    can_use = function(self, card)
-        return #G.hand.cards > 0
-    end,
-    use = function(self, card, area, copier)
-        if G.hand.cards and #G.hand.cards > 0 then
-            for i = 1, #G.hand.cards do
-                G.hand.cards[i]:flip()
-            end
+
+        if context.selling_self then
+            -- Need to remove the button while selling or it's visible when the card is dissapearing 
+            -- Using remove keeps the element around for some reason? Setting to nil is more immediate.
+            card.children.forme_button = nil
         end
-        card:flip()
+
+        if context.end_of_round and card.ability.extra.shield then
+            card:forme_change_flip()
+        end
     end,
-    keep_on_use = function(self, card)
-        return true
+    set_ability = function(self, card, initial, delay_sprites)
+        if initial then
+            -- Adding a function for the UI flip and to change state
+            card.forme_change_flip = function(self)
+                -- Flip and delay so the flip animation actually plays
+                self:flip()
+                -- Change the FRONT sprite. 
+                -- I wanted to just change the back sprite but while the joker is flipped the sell value is hidden, this is just easier
+                if self.ability.extra.shield then
+                    self.children.center:set_sprite_pos({x = 3, y = 2})
+                else
+                    self.children.center:set_sprite_pos({x = 11, y = 7})
+                end
+                -- remember to flip back or we won't see the sprite!
+                self:flip()
+                self.ability.extra.shield = not self.ability.extra.shield
+            end
+
+            -- Custom change forme button
+            card.children.forme_button = UIBox({
+                definition = {
+                    n = G.UIT.ROOT,
+                    config = {
+                        minh = 0.7,
+                        maxh = 0.9,
+                        minw = 2,
+                        maxw = 4,
+                        r = 0.08,
+                        padding = 0.1,
+                        align = "cl",
+                        colour = G.C.GREEN,
+                        hover = true,
+                        shadow = true,
+                        button = "aegislash_forme_change",
+                        func = "can_flip_aegislash",
+                        ref_table = card,
+                    },
+                    nodes = {
+                       {n=G.UIT.C, config={align = "tm"}, nodes={
+                        {n=G.UIT.R, config={align = "cm", maxw = 1.25}, nodes={
+                            {n=G.UIT.T, config={text = "Change",colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}}
+                        }},
+                        {n=G.UIT.R, config={align = "cm"}, nodes={
+                            {n=G.UIT.T, config={text = "Forme",colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}},
+                        }}
+                        }}
+                    },
+                },
+                config = {
+                    align = "cli",
+                    offset = {
+                        x = -1,
+                        y = 0.3,
+                    },
+                    bond = "Strong",
+                    parent = card,
+                },
+            })
+        end
     end,
 }
+
+G.FUNCS.aegislash_forme_change = function(e)
+    -- Flip every card in hand
+    if G.hand.cards and #G.hand.cards > 0 then
+        for i = 1, #G.hand.cards do
+            G.hand.cards[i]:flip()
+        end
+    end
+    local card = e.config.ref_table
+    -- Unhighlight yourself, otherwise the buttons are very visible underneath the flipping cards which looks weird
+    card:highlight(false)
+
+    -- Make the card flip and update state
+    if card.forme_change_flip then
+        card:forme_change_flip()
+    end
+end
+
+G.FUNCS.can_flip_aegislash = function(e)
+	local card = e.config.ref_table
+    -- Early out if ability is on cooldown
+    if card.ability.extra.shield then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+        return
+    end
+
+	if
+		not (G.CONTROLLER.locked or (G.GAME.STOP_USE and G.GAME.STOP_USE > 0))
+		and not G.SETTINGS.paused
+		and card.area and card.area.config.type == "joker"
+        and G.hand.cards and #G.hand.cards > 0
+	then
+		e.config.colour = G.C.GREEN
+		e.config.button = "aegislash_forme_change"
+		e.states.visible = true
+	else
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
+	end
+end
 
 local list = {
     slakoth, vigoroth, slaking, 
@@ -703,7 +809,7 @@ local list = {
     seviper, 
     combee, vespiquen, 
     tandemaus, maushold_three, maushold_four, 
-    -- honedge, doublade, aegislash,
+    honedge, doublade, aegislash,
 }
 
 

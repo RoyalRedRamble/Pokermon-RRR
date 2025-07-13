@@ -19,7 +19,7 @@ if (SMODS.Mods["Pokermon"] or {}).can_load then
     pokermon.add_family({"makuhita", "hariyama"})
     pokermon.add_family({"slakoth", "vigoroth", "slaking"})
     pokermon.add_family({"sableye", "mega_sableye"})
-    -- pokermon.add_family({"honedge", "doublade", "aegislash"})
+    pokermon.add_family({"honedge", "doublade", "aegislash"})
 end
 
 local helper, load_error = SMODS.load_file("functions/utilfunctions.lua")

@@ -69,3 +69,14 @@ And if you can mega evolve him, he turns all that valuable diamond munching into
 | ------ | ------ |
 | Sableye | Destroys Diamond cards left in hand after scoring <br/>Gives $1 and gains $1 of sell value for every card consumed |
 | Mega Sableye | Destroys Diamond cards left in hand after scoring <br/> Gives \$3 and gains \$3 of sell value for every card consumed <br/> Gives x0.05 Mult for each \$ of sell value this Joker has |
+
+### The Tricky Swords
+
+These swords can be tricky but can be quite powerful when played around. They will force you to have a 1 in 7 chance of drawing a card face down, but for every face down card in hand you'll gain a bonus.
+Aegislash can change form and flip your entire hand giving you a major advantage, if you can remember what your cards were!
+
+| Joker | Effect |
+| ------ | ------ |
+| Honedge | 1 in 7 chance to draw a card face down. +10 Mult for each face down card held in hand. |
+| Doublade | 1 in 7 chance to draw a card face down. +16 Mult for each face down card held in hand. |
+| Aegislash | 1 in 7 chance to draw a card face down. X1.5 Mult for each face down card held in hand. <br/> Change forme flips all cards held in hand, can only change forme oncer per round |
