@@ -225,6 +225,8 @@ return {
             rrr_settings_fam_combee = "Combee",
             rrr_settings_fam_tandemaus = "Tandemaus",
             rrr_settings_fam_honedge = "Honedge",
+
+            precise_energy_tooltip = "Man I wish I put something here!",
         },
 
     }
