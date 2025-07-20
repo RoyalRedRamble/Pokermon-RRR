@@ -65,7 +65,7 @@ disableable_pool = function(self)
     local base_evo_name = get_base_evo_name(self)
     
     -- Convert the name to a config key, check if it's in the config at all
-    if (rrr_config[base_evo_name..'_fam']) then
+    if (rrr_config['families'][base_evo_name]) then
         -- If enabled, it's in the back poke pool
         return pokemon_in_pool(self)
     end

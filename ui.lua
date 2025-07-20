@@ -1,108 +1,185 @@
-local family_toggles = {
-    {ref_value = "slakoth_fam", label = "rrr_settings_fam_slakoth"}, 
-    {ref_value = "makuhita_fam", label = "rrr_settings_fam_makuhita"}, 
-    {ref_value = "sableye_fam", label = "rrr_settings_fam_sableye"}, 
-    {ref_value = "zangoose_fam", label = "rrr_settings_fam_zangoose"}, 
-    {ref_value = "seviper_fam", label = "rrr_settings_fam_seviper"}, 
-    {ref_value = "combee_fam", label = "rrr_settings_fam_combee"}, 
-    {ref_value = "tandemaus_fam", label = "rrr_settings_fam_tandemaus"}, 
-    {ref_value = "honedge_fam", label = "rrr_settings_fam_honedge"}, 
 
-}
+G.rrr_family_config_container = {}
 
-local create_menu_toggles = function (parent, toggles)
-    -- for k, v in ipairs(toggles) do
-    --   parent.nodes[#parent.nodes + 1] = create_toggle({
-    --         label = localize(v.label),
-    --         ref_table = rrr_config,
-    --         ref_value = v.ref_value,
-    --         callback = function(_set_toggle)
-    --           NFS.write(mod_dir.."/config.lua", STR_PACK(rrr_config))
-    --         end,
-    --   })
-    --   if v.tooltip then
-    --     parent.nodes[#parent.nodes].config.detailed_tooltip = v.tooltip
+G.FUNCS.rrr_enable_families_menu = function (args)
+    local MAX_SLOTS_PER_ROW = 3
+    local MAX_ROW = 3
+    local current_row = 1
+
+    -- Clean away the last cards
+    local thing = G.OVERLAY_MENU:get_UIE_by_ID('family_ui_box_thing')
+    -- print(thing)
+    -- if thing then
+    --   if thing.config.object then
+    --     thing.config.object:remove()
     --   end
+    --   thing.config.object = UIBox {
+    --     definition = object, config = {offset = { x = 0, y = 0 }, align = 'cm', parent = thing }
+    --   }
+      
     -- end
-    local MAX_COL_LENGTH = 4
+    if thing then
+      print("REMOVE THE THINGS!")
+      -- TODO: iterate through the current nodes and remove the old cards.
+      for j = 1, MAX_ROW do
+        print(G.rrr_family_config_container.nodes[j].nodes)
+        print("-----------------------")
+        
+        for i = #G.rrr_family_config_container.nodes[j].nodes,1, -1 do
+          
+          local slot = G.rrr_family_config_container.nodes[j].nodes[i]
+          local c = slot.nodes[1].nodes[1].config.object
+          -- local c = G.your_collection[j]:remove_card(G.your_collection[j].cards[i])
+          c:remove()
+          c = nil
+          -- table.remove(G.rrr_family_config_container.nodes[j].nodes, i)
+          table.remove(slot.nodes[1].nodes, 2)
+          table.remove(slot.nodes[1].nodes, 1)
+          table.remove(slot.nodes, 1)
+          
+          
+        end
+      end
 
-    local card = Card(G.CARD_W/2, G.CARD_H, G.CARD_W, G.CARD_H, nil, G.P_CENTERS['j_rrr_slakoth'])
-    local leftSide = {
+      -- Would love to use remove_all here but some contents don't support remove apparently?
+      -- remove_all(G.rrr_family_config_container)
+
+      print("FINISHED-------------------------")
+      print(G.rrr_family_config_container)
+      -- TODO: I'm really hoping everything dissapears with this.
+      return
+
+    end
+
+
+    -- page selector
+    local current_page = 1
+    if args and args.cycle_config and args.cycle_config.current_option then
+      current_page = args.cycle_config.current_option
+    end
+    print("current_row is "..current_row)
+    local page_limit = math.ceil(#rrr_base_evos/(MAX_ROW*MAX_SLOTS_PER_ROW))
+    local page_options = {}
+    for i = 1, page_limit do
+		  table.insert(page_options, localize('k_page')..' '..tostring(i)..'/'..tostring(page_limit))
+	  end
+
+    G.rrr_family_config_container = {
       n = G.UIT.C, 
-      config={
-        align = "cl", 
-        -- colour = G.C.RED
+      config = {
+        padding = 0.2
       }, 
       nodes = {
         {
-          n = G.UIT.R, 
-          config={
-            -- colour = G.C.MONEY,
-            outline = 1.5,
-            outline_colour = HEX("FF7ABF"),
-          }, 
-          nodes = {
-            {
-              n = G.UIT.O, 
-              config={object = card},
-            },
-            create_toggle({
-              label = "",
-              col = true,
-              w = 0,
-              ref_table = rrr_config,
-              ref_value = 'slakoth_fam',
-              callback = function(_set_toggle)
-                NFS.write(mod_dir.."/config.lua", STR_PACK(rrr_config))
-              end,
-            }),
-          }
+          n = G.UIT.R,
+          nodes = {}
         },
-      }
-    }
-
-    local cardr = Card(G.CARD_W/2, G.CARD_H, G.CARD_W, G.CARD_H, nil, G.P_CENTERS['j_rrr_makuhita'])
-    local rightSide = {
-      n = G.UIT.C, 
-      config={
-        align = "cr", 
-        -- colour = G.C.RED
-      }, 
-      nodes = {
         {
-          n = G.UIT.R, 
-          config={
-            -- colour = G.C.MONEY,
-            outline = 1.5,
-            outline_colour = HEX("FF7ABF"),
-          }, 
-          nodes = {
-            {
-              n = G.UIT.O, 
-              config={object = cardr}
-            },
-            create_toggle({
-              label = "",
-              col = true,
-              w = 0,
-              ref_table = rrr_config,
-              ref_value = 'makuhita_fam',
-              callback = function(_set_toggle)
-                NFS.write(mod_dir.."/config.lua", STR_PACK(rrr_config))
-              end,
-            }),
-          }
+          n = G.UIT.R,
+          nodes = {}
         },
+        {
+          n = G.UIT.R,
+          nodes = {}
+        },
+        create_option_cycle({
+          options = page_options,
+          opt_callback =
+						'rrr_enable_families_menu',
+          current_option = current_page,
+          colour = G.C.RED,
+        })    
       }
     }
 
-    local container = {n = G.UIT.R, config={padding = 0.2}, nodes ={leftSide, rightSide}}
-    parent.nodes[#parent.nodes + 1] = container
-  end
+    -- TODO: Added a page selector to the bottom
+    -- Need to index into the toggles by page ammount
+
+    -- FROM SMODS:
+    -- create_option_cycle({
+    --   options = page_options,
+    --   w = 4.5,
+    --   cycle_shoulders = true,
+    --   opt_callback = 'your_collection_blinds_page',
+    --   focus_args = {snap_to = true, nav = 'wide'},
+    --   current_option = page,
+    --   colour = G.ACTIVE_MOD_UI and (G.ACTIVE_MOD_UI.ui_config or {}).collection_option_cycle_colour or G.C.RED,
+    --   no_pips = true
+    -- })
+
+
+    -- ANOTHER TODO: Right clicking on card is great, going back however returns to the collection, not the previous ui route.
+
+    for k, v in ipairs({unpack(rrr_base_evos, current_page, MAX_ROW * MAX_SLOTS_PER_ROW)}) do
+      -- ignore values till we get to the ones we want to see
+      -- if k > ((MAX_ROW * MAX_SLOTS_PER_ROW) * (current_page -1)) then
+      --   continue
+      -- end
+      print(v)
+
+      -- First we figure out which row we go into
+
+      -- Are we due for a row change
+      if #G.rrr_family_config_container.nodes[current_row].nodes >= MAX_SLOTS_PER_ROW then
+        current_row = current_row + 1
+        -- If we've hit the cap, return what we have so far.
+        if current_row > MAX_ROW then
+          break
+        end
+      end
+
+      local slot_entry = {
+        n = G.UIT.C, 
+        config={
+          align = "cr", 
+        }, 
+        nodes = {
+          {
+            n = G.UIT.R, 
+            config={
+              r = 0.1,
+              outline = 1.5,
+              outline_colour = HEX("FF7ABF"),
+            }, 
+            nodes = {
+              {
+                n = G.UIT.O, 
+                config={object = Card(G.CARD_W/2, G.CARD_H, G.CARD_W, G.CARD_H, nil, G.P_CENTERS['j_rrr_'..v])}
+              },
+              create_toggle({
+                label = "",
+                col = true,
+                w = 0,
+                ref_table = rrr_config['families'],
+                ref_value = v,
+                callback = function(_set_toggle)
+                  NFS.write(mod_dir.."/config.lua", STR_PACK(rrr_config))
+                end,
+              }),
+            }
+          },
+        }
+      }
+
+      G.rrr_family_config_container.nodes[current_row].nodes[#G.rrr_family_config_container.nodes[current_row].nodes+1] = slot_entry
+    end
+    
+    -- parent.nodes[#parent.nodes + 1] = G.rrr_family_config_container
+    -- return G.rrr_family_config_container
+
+    -- local thing = G.OVERLAY_MENU:get_UIE_by_ID('family_menu_container')
+    -- if thing then
+    --   if thing.config.object then
+    --     thing.config.object:remove()
+    --   end
+    --   thing.config.object = UIBox {
+    --     definition = object, config = {offset = { x = 0, y = 0 }, align = 'cm', parent = hand_list }
+    --   }
+    -- end
+end
   
 config = function()
   local family_settings = {n = G.UIT.R, config = {align = "tm", padding = 0.05, scale = 0.75, colour = G.C.CLEAR,}, nodes = {}}
-  -- create_menu_toggles(family_settings, family_toggles)
   
   local config_nodes =   
   {
@@ -128,7 +205,7 @@ config = function()
       minw = 3.85,
       colour = HEX("FF7ABF"),
       button = "rrr_families",
-      label = {"Energy Options"}
+      label = {"Family Config"}
     }),
   }
   return config_nodes
@@ -136,13 +213,23 @@ end
 
 function G.FUNCS.rrr_families(e)
   local ttip = {set = 'Other', key = 'precise_energy_tooltip'}
-  local energy_settings = {n = G.UIT.R, config = {align = "tm", padding = 0.05, scale = 0.75, colour = G.C.CLEAR}, nodes = {}}
-  create_menu_toggles(energy_settings, family_toggles)
+  -- Calling this initializes the container at page 1.
+  G.FUNCS.rrr_enable_families_menu()
+
+  local family_settings_menu_container = {n = G.UIT.R, config = {id = 'family_menu_container', align = "tm", padding = 0.05, scale = 0.75, colour = G.C.CLEAR}, nodes = {
+    G.rrr_family_config_container,  
+  }}
+  -- G.FUNCS.rrr_enable_families_menu(energy_settings)
   
+  -- TODO, this is what's sending me to collection? Maybe? Look into this anyway
   local t = create_UIBox_generic_options({ back_func = G.ACTIVE_MOD_UI and "openModUI_"..G.ACTIVE_MOD_UI.id or 'your_collection',
-      contents = {energy_settings}
+      contents = {family_settings_menu_container}
   })
+  t.config.id = 'family_ui_box_thing'
   G.FUNCS.overlay_menu{definition = t}
+
+  -- local thing = G.OVERLAY_MENU:get_UIE_by_ID('family_ui_box_thing')
+  -- print(thing)
 end
 
 -- TODO toggles are bare minimum, I'd like to have a paginated ui element with the cards of the base form and the toggle

@@ -39,6 +39,8 @@ else
   UI()
 end
 
+rrr_base_evos = {}
+
 --Load pokemon file
 local pfiles = NFS.getDirectoryItems(mod_dir.."pokemon")
 if (SMODS.Mods["Pokermon"] or {}).can_load and SMODS.Mods["Pokermon"] then
@@ -56,7 +58,14 @@ if (SMODS.Mods["Pokermon"] or {}).can_load and SMODS.Mods["Pokermon"] then
           if (pokermon_config.jokers_only and not item.joblacklist) or not pokermon_config.jokers_only then
             -- if the item has a ptype we can reasonably guess it's a pokemon
             if (item.ptype) then
-              if (rrr_config[get_base_evo_name(item)..'_fam']) then
+              local base_name = get_base_evo_name(item)
+              -- Record the base evo names for later.
+              if base_name == item.name then
+                rrr_base_evos[#rrr_base_evos + 1] = base_name
+              end
+
+              -- I'd really like to look into if I can dynamically make the config...
+              if (rrr_config['families'][get_base_evo_name(item)] ~= nil) then
                 item.custom_pool_func = true
                 item.in_pool = disableable_pool
               else

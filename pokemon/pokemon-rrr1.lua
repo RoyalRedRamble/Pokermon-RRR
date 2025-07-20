@@ -801,6 +801,84 @@ G.FUNCS.can_flip_aegislash = function(e)
 	end
 end
 
+-- Temporary, just to bulk out families!
+
+local tadbulb={
+    name = "tadbulb",
+    pos = {x = 9, y=2},
+    config = {extra = {}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Colorless",
+    atlas = "Pokedex9",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        
+    end,
+}
+
+local orthworm={
+    name = "orthworm",
+    pos = {x = 3, y=5},
+    config = {extra = {}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Colorless",
+    atlas = "Pokedex9",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        
+    end,
+}
+
+local frigibax={
+    name = "frigibax",
+    pos = {x = 8, y=6},
+    config = {extra = {}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Colorless",
+    atlas = "Pokedex9",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        
+    end,
+}
+
+local flamigo={
+    name = "flamigo",
+    pos = {x = 8, y=5},
+    config = {extra = {}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 3,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Colorless",
+    atlas = "Pokedex9",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        
+    end,
+}
+
 local list = {
     slakoth, vigoroth, slaking, 
     makuhita, hariyama, 
@@ -810,6 +888,10 @@ local list = {
     combee, vespiquen, 
     tandemaus, maushold_three, maushold_four, 
     honedge, doublade, aegislash,
+    tadbulb,
+    orthworm,
+    frigibax,
+    flamigo
 }
 
 
