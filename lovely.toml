@@ -61,3 +61,16 @@ if self == G.hand and self.config.type ~= 'discard' and self.config.type ~= 'dec
 end
 '''
 match_indent = true
+
+
+# Custom menu redirection for pokedex menu
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Pokermon "pokeui.lua"]'
+pattern = "if menu and clicked.config.center.poke_multi_item then menu = 'your_collection_consumables' end"
+position = "after"
+payload = '''
+if menu and clicked.prev_menu then menu = clicked.prev_menu end
+'''
+match_indent = true
+times = 2

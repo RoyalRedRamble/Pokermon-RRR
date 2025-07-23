@@ -4,8 +4,11 @@ function G.FUNCS.rrr_families(e)
   G.FUNCS.overlay_menu{definition = create_UIBox_rrr_joker_pool()}
 end
 
+-- This is a global so that when other menus take us away we can return to the last page visited
+rrr_joker_pool_current_page = 1
 
---# Part 1 Start of attempt 2
+
+--# Part 1
 -- Entry point, create function for container
 
 function create_UIBox_rrr_joker_pool()
@@ -31,8 +34,7 @@ function create_UIBox_rrr_joker_pool_content(page)
   local MAX_PAGE_CONTENTS = MAX_ROW*MAX_SLOTS_PER_ROW
 
   -- page selector
-  local current_page = page or 1
-  -- print("current_row is "..current_row)
+  if page then rrr_joker_pool_current_page = page end
   local page_limit = math.ceil(#rrr_base_evos/(MAX_PAGE_CONTENTS))
   local page_options = {}
   for i = 1, page_limit do
@@ -61,18 +63,15 @@ function create_UIBox_rrr_joker_pool_content(page)
         options = page_options,
         opt_callback =
           'rrr_joker_pool_page',
-        current_option = current_page,
+        current_option = rrr_joker_pool_current_page,
         colour = G.C.RED,
       })    
     }
   }
 
-  -- ANOTHER TODO: Right clicking on card is great, going back however returns to the collection, not the previous ui route.
-
-
   -- MAN I really hate how this isn't zero indexed sometimes.
-  local startSlice = ((current_page - 1) * (MAX_PAGE_CONTENTS)) + 1
-  local endSlice = current_page * MAX_PAGE_CONTENTS
+  local startSlice = ((rrr_joker_pool_current_page - 1) * (MAX_PAGE_CONTENTS)) + 1
+  local endSlice = rrr_joker_pool_current_page * MAX_PAGE_CONTENTS
 
   for k, v in ipairs({unpack(rrr_base_evos, startSlice, endSlice)}) do
 
@@ -87,10 +86,23 @@ function create_UIBox_rrr_joker_pool_content(page)
       end
     end
 
+    local card = Card(G.CARD_W/2, G.CARD_H, G.CARD_W, G.CARD_H, nil, G.P_CENTERS['j_rrr_'..v], {bypass_discovery_center = true})
+    card.debuff = not rrr_config['families'][v]
+    -- Monkey patching some context into the card so it has a way to return to this menu
+    card.prev_menu = "rrr_families"
+
+
+    -- TODO: Tooltip? I like avoiding text as it makes it more localization friendly
+    -- local status = "Enabled"
+    -- if card.debuff then
+    --   status = "Disabled"
+    -- end
+
     local slot_entry = {
       n = G.UIT.C, 
       config={
         align = "cr", 
+        -- tooltip = {text = {v.." family is "..status}},
       }, 
       nodes = {
         {
@@ -103,7 +115,7 @@ function create_UIBox_rrr_joker_pool_content(page)
           nodes = {
             {
               n = G.UIT.O, 
-              config={object = Card(G.CARD_W/2, G.CARD_H, G.CARD_W, G.CARD_H, nil, G.P_CENTERS['j_rrr_'..v])}
+              config={object = card}
             },
             create_toggle({
               label = "",
@@ -111,7 +123,8 @@ function create_UIBox_rrr_joker_pool_content(page)
               w = 0,
               ref_table = rrr_config['families'],
               ref_value = v,
-              callback = function(_set_toggle)
+              callback = function(set_toggle)
+                card.debuff = not set_toggle
                 NFS.write(mod_dir.."/config.lua", STR_PACK(rrr_config))
               end,
             }),
@@ -123,8 +136,7 @@ function create_UIBox_rrr_joker_pool_content(page)
     G.rrr_family_config_container.nodes[current_row].nodes[#G.rrr_family_config_container.nodes[current_row].nodes+1] = slot_entry
   end
 
-
-  local t = create_UIBox_generic_options({ back_func = G.ACTIVE_MOD_UI and "openModUI_"..G.ACTIVE_MOD_UI.id or 'your_collection',
+  local t = create_UIBox_generic_options({ back_func = G.ACTIVE_MOD_UI and "openModUI_"..G.ACTIVE_MOD_UI.id,
     contents = {G.rrr_family_config_container}
   })
 
@@ -136,7 +148,7 @@ end
 --#Part 3
 -- The cleaner and callback enabler
 G.FUNCS.rrr_joker_pool_page = function(args)
-  local page = args.cycle_config.current_option or 1
+  local page = args and args.cycle_config and args.cycle_config.current_option or 1
 	local t = create_UIBox_rrr_joker_pool_content(page)
 	local e = G.OVERLAY_MENU:get_UIE_by_ID('rrr_joker_pool_content')
 	if e.config.object then e.config.object:remove() end
@@ -146,7 +158,12 @@ G.FUNCS.rrr_joker_pool_page = function(args)
     }
 end
 
+
+--# Config entry point
 config = function()
+  -- reset pagination when showing home page
+  rrr_joker_pool_current_page = 1
+
   local family_settings = {n = G.UIT.R, config = {align = "tm", padding = 0.05, scale = 0.75, colour = G.C.CLEAR,}, nodes = {}}
   
   local config_nodes =   
@@ -179,9 +196,6 @@ config = function()
   return config_nodes
 end
 
--- TODO toggles are bare minimum, I'd like to have a paginated ui element with the cards of the base form and the toggle
--- Using the family UI code we should be able to right click the card element to see the whole family line.
--- UI is hard, future problems! Toggles work for now.
 SMODS.current_mod.config_tab = function()
     return {
       n = G.UIT.ROOT,
