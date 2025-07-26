@@ -27,6 +27,11 @@ local the_rivals = {
     },
 }
 
+local list = {
+    the_rivals,
+    -- combee
+}
+
 return {name = "Challenges",
-    list = {the_rivals}
+    list = list,
 }

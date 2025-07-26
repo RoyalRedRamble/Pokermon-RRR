@@ -146,7 +146,7 @@ local hariyama={
     end,
     rarity = 2,
     cost = 6,
-    stage = "Basic",
+    stage = "One",
     ptype = "Fighting",
     atlas = "Pokedex3",
     blueprint_compat = true,
@@ -451,7 +451,7 @@ end
 local tandemaus={
     name = "tandemaus",
     pos = {x = 5, y=1},
-    config = {extra = {mult = 5, origMult = 5, odds=90, threeChance = 0.3, rounds = 5, combo = true, hand = "Pair"}},
+    config = {extra = {mult = 5, totalMult = 5, odds=90, threeChance = 0.3, rounds = 5, combo = true, hand = "Pair"}},
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
         info_queue[#info_queue+1] = {set = 'Other', key = 'population_bomb', vars={center.ability.extra.odds, center.ability.extra.mult}}
@@ -467,8 +467,8 @@ local tandemaus={
         if context.individual and context.cardarea == G.play and next(context.poker_hands[card.ability.extra.hand]) then
             if card.ability.extra.combo then
                 if pseudorandom('tandemaus') < card.ability.extra.odds/100 then
-                    local mult = card.ability.extra.mult
-                    card.ability.extra.mult = card.ability.extra.mult * 2
+                    local mult = card.ability.extra.totalMult
+                    card.ability.extra.totalMult = mult * 2
                     return {
                         message = localize("rrr_population_bomb"),
                         mult = mult,
@@ -484,7 +484,7 @@ local tandemaus={
         end
 
         if context.after then
-            card.ability.extra.mult = card.ability.extra.origMult
+            card.ability.extra.totalMult = card.ability.extra.mult
             card.ability.extra.combo = true
         end
 
@@ -634,7 +634,7 @@ local doublade = {
     end,
     rarity = "poke_safari",
     cost = 6,
-    stage = "Basic",
+    stage = "One",
     ptype = "Metal",
     atlas = "Pokedex6",
     blueprint_compat = true,
@@ -674,7 +674,7 @@ local aegislash = {
     end,
     rarity = "poke_safari",
     cost = 6,
-    stage = "Basic",
+    stage = "Two",
     ptype = "Metal",
     atlas = "Pokedex6",
     blueprint_compat = true,
@@ -691,12 +691,16 @@ local aegislash = {
         if context.selling_self then
             -- Need to remove the button while selling or it's visible when the card is dissapearing 
             -- Using remove keeps the element around for some reason? Setting to nil is more immediate.
+            card.children.forme_button:remove()
             card.children.forme_button = nil
         end
 
         if context.end_of_round and card.ability.extra.shield then
             card:forme_change_flip()
         end
+    end,
+    load = function(self, card, card_table, other_card)
+        self:set_ability(card, true)
     end,
     set_ability = function(self, card, initial, delay_sprites)
         if initial then
@@ -716,46 +720,60 @@ local aegislash = {
                 self.ability.extra.shield = not self.ability.extra.shield
             end
 
-            -- Custom change forme button
-            card.children.forme_button = UIBox({
-                definition = {
-                    n = G.UIT.ROOT,
-                    config = {
-                        minh = 0.7,
-                        maxh = 0.9,
-                        minw = 2,
-                        maxw = 4,
-                        r = 0.08,
-                        padding = 0.1,
-                        align = "cl",
-                        colour = G.C.GREEN,
-                        hover = true,
-                        shadow = true,
-                        button = "aegislash_forme_change",
-                        func = "can_flip_aegislash",
-                        ref_table = card,
-                    },
-                    nodes = {
-                       {n=G.UIT.C, config={align = "tm"}, nodes={
-                        {n=G.UIT.R, config={align = "cm", maxw = 1.25}, nodes={
-                            {n=G.UIT.T, config={text = "Change",colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}}
-                        }},
-                        {n=G.UIT.R, config={align = "cm"}, nodes={
-                            {n=G.UIT.T, config={text = "Forme",colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}},
-                        }}
-                        }}
-                    },
-                },
-                config = {
-                    align = "cli",
-                    offset = {
-                        x = -1,
-                        y = 0.3,
-                    },
-                    bond = "Strong",
-                    parent = card,
-                },
-            })
+            local highlight_ref = Card.highlight
+            card.highlight = function(self, is_highlighted)
+                if is_highlighted and card.area.config.type ~= "shop" and card.area ~= G.pack_cards then
+                     -- Custom change forme button
+                    card.children.forme_button = UIBox({
+                        definition = {
+                            n = G.UIT.ROOT,
+                            config = {
+                                minh = 0.7,
+                                maxh = 0.9,
+                                minw = 2,
+                                maxw = 4,
+                                r = 0.08,
+                                padding = 0.1,
+                                align = "cl",
+                                colour = G.C.GREEN,
+                                hover = true,
+                                shadow = true,
+                                button = "aegislash_forme_change",
+                                func = "can_flip_aegislash",
+                                ref_table = card,
+                            },
+                            nodes = {
+                            {n=G.UIT.C, config={align = "tm"}, nodes={
+                                {n=G.UIT.R, config={align = "cm", maxw = 1.25}, nodes={
+                                    {n=G.UIT.T, config={text = "Change",colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}}
+                                }},
+                                {n=G.UIT.R, config={align = "cm"}, nodes={
+                                    {n=G.UIT.T, config={text = "Forme",colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}},
+                                }}
+                                }}
+                            },
+                        },
+                        config = {
+                            align = "cli",
+                            offset = {
+                                x = -1,
+                                y = 0.3,
+                            },
+                            bond = "Strong",
+                            parent = card,
+                        },
+                    })
+                end
+                if not is_highlighted or card.area.config.type == "shop" or card.area == G.pack_cards then
+                    if card.children.forme_button then
+                        card.children.forme_button:remove()
+                        card.children.forme_button = nil
+                    end
+
+                end
+
+                return highlight_ref(self, is_highlighted)
+            end
         end
     end,
 }
@@ -779,6 +797,9 @@ end
 
 G.FUNCS.can_flip_aegislash = function(e)
 	local card = e.config.ref_table
+    if card.ability.extra == nil then
+        return
+    end
     -- Early out if ability is on cooldown
     if card.ability.extra.shield then
         e.config.colour = G.C.UI.BACKGROUND_INACTIVE
@@ -791,6 +812,7 @@ G.FUNCS.can_flip_aegislash = function(e)
 		and not G.SETTINGS.paused
 		and card.area and card.area.config.type == "joker"
         and G.hand.cards and #G.hand.cards > 0
+        and G.STATE ~= G.STATES.SMODS_BOOSTER_OPENED
 	then
 		e.config.colour = G.C.GREEN
 		e.config.button = "aegislash_forme_change"
@@ -803,81 +825,81 @@ end
 
 -- Temporary, just to bulk out families!
 
-local tadbulb={
-    name = "tadbulb",
-    pos = {x = 9, y=2},
-    config = {extra = {}},
-    loc_vars = function(self, info_queue, center)
-        type_tooltip(self, info_queue, center)
-        return {vars = {}}
-    end,
-    rarity = 3,
-    cost = 6,
-    stage = "Basic",
-    ptype = "Colorless",
-    atlas = "Pokedex9",
-    blueprint_compat = true,
-    calculate = function(self, card, context)
+-- local tadbulb={
+--     name = "tadbulb",
+--     pos = {x = 9, y=2},
+--     config = {extra = {}},
+--     loc_vars = function(self, info_queue, center)
+--         type_tooltip(self, info_queue, center)
+--         return {vars = {}}
+--     end,
+--     rarity = 3,
+--     cost = 6,
+--     stage = "Basic",
+--     ptype = "Colorless",
+--     atlas = "Pokedex9",
+--     blueprint_compat = true,
+--     calculate = function(self, card, context)
         
-    end,
-}
+--     end,
+-- }
 
-local orthworm={
-    name = "orthworm",
-    pos = {x = 3, y=5},
-    config = {extra = {}},
-    loc_vars = function(self, info_queue, center)
-        type_tooltip(self, info_queue, center)
-        return {vars = {}}
-    end,
-    rarity = 3,
-    cost = 6,
-    stage = "Basic",
-    ptype = "Colorless",
-    atlas = "Pokedex9",
-    blueprint_compat = true,
-    calculate = function(self, card, context)
+-- local orthworm={
+--     name = "orthworm",
+--     pos = {x = 3, y=5},
+--     config = {extra = {}},
+--     loc_vars = function(self, info_queue, center)
+--         type_tooltip(self, info_queue, center)
+--         return {vars = {}}
+--     end,
+--     rarity = 3,
+--     cost = 6,
+--     stage = "Basic",
+--     ptype = "Colorless",
+--     atlas = "Pokedex9",
+--     blueprint_compat = true,
+--     calculate = function(self, card, context)
         
-    end,
-}
+--     end,
+-- }
 
-local frigibax={
-    name = "frigibax",
-    pos = {x = 8, y=6},
-    config = {extra = {}},
-    loc_vars = function(self, info_queue, center)
-        type_tooltip(self, info_queue, center)
-        return {vars = {}}
-    end,
-    rarity = 3,
-    cost = 6,
-    stage = "Basic",
-    ptype = "Colorless",
-    atlas = "Pokedex9",
-    blueprint_compat = true,
-    calculate = function(self, card, context)
+-- local frigibax={
+--     name = "frigibax",
+--     pos = {x = 8, y=6},
+--     config = {extra = {}},
+--     loc_vars = function(self, info_queue, center)
+--         type_tooltip(self, info_queue, center)
+--         return {vars = {}}
+--     end,
+--     rarity = 3,
+--     cost = 6,
+--     stage = "Basic",
+--     ptype = "Colorless",
+--     atlas = "Pokedex9",
+--     blueprint_compat = true,
+--     calculate = function(self, card, context)
         
-    end,
-}
+--     end,
+-- }
 
-local flamigo={
-    name = "flamigo",
-    pos = {x = 8, y=5},
-    config = {extra = {}},
-    loc_vars = function(self, info_queue, center)
-        type_tooltip(self, info_queue, center)
-        return {vars = {}}
-    end,
-    rarity = 3,
-    cost = 6,
-    stage = "Basic",
-    ptype = "Colorless",
-    atlas = "Pokedex9",
-    blueprint_compat = true,
-    calculate = function(self, card, context)
+-- local flamigo={
+--     name = "flamigo",
+--     pos = {x = 8, y=5},
+--     config = {extra = {}},
+--     loc_vars = function(self, info_queue, center)
+--         type_tooltip(self, info_queue, center)
+--         return {vars = {}}
+--     end,
+--     rarity = 3,
+--     cost = 6,
+--     stage = "Basic",
+--     ptype = "Colorless",
+--     atlas = "Pokedex9",
+--     blueprint_compat = true,
+--     calculate = function(self, card, context)
         
-    end,
-}
+--     end,
+-- }
 
 local list = {
     slakoth, vigoroth, slaking, 
@@ -888,10 +910,10 @@ local list = {
     combee, vespiquen, 
     tandemaus, maushold_three, maushold_four, 
     honedge, doublade, aegislash,
-    tadbulb,
-    orthworm,
-    frigibax,
-    flamigo
+    -- tadbulb,
+    -- orthworm,
+    -- frigibax,
+    -- flamigo
 }
 
 
