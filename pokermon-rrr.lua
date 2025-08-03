@@ -7,6 +7,9 @@ SMODS.Atlas({
 })
 
 
+SMODS.Shader({ key = 'cursed', path = 'cursed.fs' })
+
+
 -- Get mod path and load other files
 mod_dir = ''..SMODS.current_mod.path
 rrr_config = SMODS.current_mod.config

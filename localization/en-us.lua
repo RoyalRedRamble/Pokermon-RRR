@@ -15,6 +15,7 @@ return {
                 text = {
                     "{X:mult,C:white}X#1#{} if {C:attention}#2#{} or more",
                     "cards held in hand",
+                    "while scoring",
                     "{br:3}ERROR - CONTACT STEAK",
                     "Applies {C:attention}The Serpent{}",
                     "{C:inactive,s:0.8}(Only during a {C:attention,s:0.8}Blind{C:inactive,s:0.8})",
@@ -83,8 +84,10 @@ return {
                 text = {
                     "{C:blue}+#1#{} hands",
                     "{C:attention}+#2#{} hand size",
+                    "{br:3}ERROR - CONTACT STEAK",
                     "Gain {C:attention}+1{} hand size for",
-                    "every hand used this round",
+                    "every {C:attention}#3#{} hands used this round",
+                    "{C:inactive}(#4#/#3#){}",
                 } 
             },
             j_rrr_slakoth = {

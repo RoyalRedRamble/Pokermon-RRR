@@ -231,3 +231,26 @@ SMODS.DrawStep {
 -- NEED to add your draw step key to the list of keys to ignore
 -- We're telling the drawing engine of SMODS "Hey, we have a rule set up to specifically draw this child, so don't worry about it"
 SMODS.draw_ignore_keys.forme_buttons = true
+
+
+
+-- Cursed cards
+-- First of all, draw the effects
+-- If it's not quite edition and not quite enhancement, where does the calculation kick in?
+-- Maybe it's JUST in the mons who care about curses?
+
+SMODS.DrawStep {
+    key = 'cursed',
+    order = 10, -- Same as 'card_type_shader' which seems appropriate
+    func = function(self)
+      if self.cursed then
+        self.children.center:draw_shader('rrr_cursed', nil, self.ARGS.send_to_shader)
+        if self.children.front and self.ability.effect ~= 'Stone Card' then
+            self.children.front:draw_shader('rrr_cursed', nil, self.ARGS.send_to_shader)
+        end
+        -- print("terrible curser!")
+      end
+    end,
+} 
+
+SMODS.draw_ignore_keys.cursed = true

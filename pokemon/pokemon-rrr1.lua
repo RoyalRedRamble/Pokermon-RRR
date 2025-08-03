@@ -139,10 +139,15 @@ local makuhita={
 local hariyama={
     name = "hariyama",
     pos = {x = 5, y=4},
-    config = {extra = {hands = 2, h_size = 2, orig_h_size = 2}},
+    config = {extra = {hands = 2, h_size = 1, orig_h_size = 1, max_played_hands = 2, played_hands = 0}},
     loc_vars = function(self, info_queue, center)
         type_tooltip(self, info_queue, center)
-        return {vars = {center.ability.extra.hands, center.ability.extra.h_size}}
+        return {vars = {
+            center.ability.extra.hands, 
+            center.ability.extra.h_size, 
+            center.ability.extra.max_played_hands,
+            center.ability.extra.played_hands,
+        }}
     end,
     rarity = 2,
     cost = 6,
@@ -153,13 +158,18 @@ local hariyama={
     calculate = function(self, card, context)
         -- Every hand played increases your hand size by one
         if context.after then
-            local changed_size = 1
-            card.ability.extra.h_size = card.ability.extra.h_size + changed_size
-            G.hand:change_size(changed_size)
+            card.ability.extra.played_hands = card.ability.extra.played_hands + 1
+            if card.ability.extra.played_hands >= card.ability.extra.max_played_hands then
+                card.ability.extra.played_hands = 0
+                local changed_size = 1
+                card.ability.extra.h_size = card.ability.extra.h_size + changed_size
+                G.hand:change_size(changed_size)
+            end
         end
 
         -- reset to original size when finished
         if context.end_of_round and context.cardarea == G.jokers then
+            card.ability.extra.played_hands = 0
             G.hand:change_size(-(card.ability.extra.h_size-card.ability.extra.orig_h_size))
             card.ability.extra.h_size = card.ability.extra.orig_h_size
         end
@@ -823,6 +833,32 @@ G.FUNCS.can_flip_aegislash = function(e)
 	end
 end
 
+
+local shuppet={
+    name = "shuppet",
+    pos = {x = 4, y=10},
+    config = {extra = {}},
+    loc_vars = function(self, info_queue, center)
+        type_tooltip(self, info_queue, center)
+        return {vars = {}}
+    end,
+    rarity = 1,
+    cost = 6,
+    stage = "Basic",
+    ptype = "Colorless",
+    atlas = "Pokedex3",
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.hand_drawn then
+            if G.hand.cards and #G.hand.cards > 0 then
+                for i = 1, #G.hand.cards do
+                    G.hand.cards[i].cursed = true
+                end
+            end
+        end   
+    end,
+}
+
 -- Temporary, just to bulk out families!
 
 -- local tadbulb={
@@ -910,6 +946,7 @@ local list = {
     combee, vespiquen, 
     tandemaus, maushold_three, maushold_four, 
     honedge, doublade, aegislash,
+    shuppet,
     -- tadbulb,
     -- orthworm,
     -- frigibax,
